@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Lumen Frame | Produção Audiovisual</title>
+  <meta name="description"
+    content="Lumen Frame — Produtora audiovisual especializada em cobertura de eventos, vídeos corporativos e transmissão ao vivo com qualidade cinematográfica." />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0b50da",
+            "accent-beige": "#f5f5dc",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hero-overlay {
+      background: linear-gradient(rgba(16, 22, 34, 0.4), rgba(16, 22, 34, 0.8));
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Video Modal */
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .video-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .video-modal video {
+      width: 90%;
+      max-width: 1200px;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 0 80px rgba(11, 80, 218, 0.3);
+    }
+
+    .video-modal-close {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 24px;
+      transition: all 0.3s;
+    }
+
+    .video-modal-close:hover {
+      background: #0b50da;
+      border-color: #0b50da;
+      transform: rotate(90deg);
+    }
+
+    /* Navbar hide on scroll */
+    #navbar {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, padding 0.3s;
+    }
+
+    #navbar.hidden-nav {
+      transform: translateY(-100%);
+    }
+
+    /* Text split for animation */
+    .line-wrapper {
+      overflow: hidden;
+      display: block;
+    }
+
+    .line-inner {
+      display: block;
+    }
+
+    /* Parallax images */
+    #sobre .rounded-2xl {
+      overflow: hidden;
+    }
+
+    #sobre .rounded-2xl img {
+      will-change: transform;
+    }
+
+    /* Smooth card tilt */
+    .service-card-wrapper {
+      perspective: 1000px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #101622;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0b50da;
+      border-radius: 2px;
+    }
+
+    /* Loading screen */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #101622;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .loader-bar {
+      width: 200px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loader-fill {
+      width: 0%;
+      height: 100%;
+      background: #0b50da;
+      border-radius: 3px;
+    }
+
+    .loader-text {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Horizontal line animation */
+    .h-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #0b50da, transparent);
+      transform: scaleX(0);
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+
+  <!-- Loading Screen -->
+  <div class="loader" id="loader">
+    <div class="loader-text">Lumen Frame</div>
+    <div class="loader-bar">
+      <div class="loader-fill" id="loader-fill"></div>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div class="video-modal" id="video-modal">
+    <button class="video-modal-close" id="video-modal-close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <video id="modal-video" controls controlsList="nodownload" style="display:none;">
+      <source src="video do header.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Header -->
+  <header id="navbar"
+    class="fixed top-0 w-full z-50 bg-background-dark/80 backdrop-blur-md border-b border-slate-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary p-2 rounded-lg text-white">
+          <span class="material-symbols-outlined text-2xl">filter_tilt_shift</span>
+        </div>
+        <h1 class="text-xl font-bold tracking-tight text-white uppercase">Lumen Frame</h1>
+      </div>
+      <nav class="hidden md:flex items-center gap-10">
+        <a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#hero">Início</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors text-slate-300"
+          href="#portfolio">Portfólio</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#sobre">Sobre</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#servicos">Serviços</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#contato">Contato</a>
+      </nav>
+      <a href="#cta"
+        class="bg-primary hover:bg-blue-700 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/25">
+        Peça seu Orçamento
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative h-screen w-full flex items-center justify-center overflow-hidden pt-20">
+    <!-- Video Background -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 hero-overlay z-10"></div>
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="video do header.mp4" type="video/mp4" />
+      </video>
+      <img class="w-full h-full object-cover hidden" id="hero-fallback"
+        data-alt="Cinematographer filming a high-end corporate event" src="img/hero.jpg" />
+    </div>
+    <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
+      <span
+        class="inline-block px-4 py-1.5 mb-6 rounded-full border border-primary/50 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">Audiovisual
+        de Impacto</span>
+      <h2 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1]">
+        Capturando a <span class="text-primary italic">essência</span> do seu momento.
+      </h2>
+      <p class="text-xl text-slate-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+        Vídeos que conectam, emocionam e transformam memórias em legados visuais inesquecíveis.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#cta"
+          class="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-primary/40 w-full sm:w-auto text-center">
+          Peça seu Orçamento
+        </a>
+        <button id="play-reel-btn"
+          class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">play_circle</span> Ver Reel
+        </button>
+      </div>
+    </div>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+      <span class="material-symbols-outlined text-white/50 text-3xl">expand_more</span>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="sobre" class="bg-accent-beige py-24 px-6 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <div class="relative reveal">
+        <div class="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl"></div>
+        <h3 class="text-primary text-sm font-bold uppercase tracking-widest mb-4">Sobre a Lumen Frame</h3>
+        <h2 class="text-4xl md:text-5xl font-bold text-background-dark mb-8 leading-tight">
+          Transformamos visão em realidade cinematográfica.
+        </h2>
+        <div class="space-y-6 text-background-dark/80 text-lg leading-relaxed">
+          <p>
+            A Lumen Frame nasceu da paixão por contar histórias através da lente. Somos uma produtora focada em elevar o
+            padrão visual de eventos e marcas.
+          </p>
+          <p>
+            Com equipamentos de ponta e um olhar artístico apurado, nossa equipe entrega não apenas um vídeo, mas uma
+            experiência sensorial que captura cada detalhe e emoção.
+          </p>
+        </div>
+        <div class="mt-10 grid grid-cols-2 gap-8 border-t border-background-dark/10 pt-10">
+          <div>
+            <div class="text-primary text-3xl font-bold mb-1">500+</div>
+            <div class="text-background-dark/60 text-sm font-medium">Eventos Cobertos</div>
+          </div>
+          <div>
+            <div class="text-primary text-3xl font-bold mb-1">10+</div>
+            <div class="text-background-dark/60 text-sm font-medium">Anos de Experiência</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 reveal reveal-delay-2">
+        <div class="space-y-4">
+          <div class="rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
+            <img class="w-full h-full object-cover" alt="High tech video camera in production setting"
+              src="img/about1.jpg" />
+          </div>
+          <div class="rounded-2xl overflow-hidden aspect-square shadow-2xl">
+            <img class="w-full h-full object-cover" alt="Close up of a camera lens with studio lighting"
+              src="img/about2.jpg" />
+          </div>
+        </div>
+        <div class="space-y-4 pt-8">
+          <div class="rounded-2xl overflow-hidden aspect-square shadow-2xl">
+            <img class="w-full h-full object-cover" alt="Dynamic event lighting at a concert" src="img/about3.jpg" />
+          </div>
+          <div class="rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
+            <img class="w-full h-full object-cover" alt="Professional video editing workstation" src="img/about4.jpg" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services / Portfolio Section -->
+  <section id="servicos" class="py-24 px-6 bg-background-dark">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 reveal">
+        <div class="max-w-2xl">
+          <h3 class="text-primary text-sm font-bold uppercase tracking-widest mb-4">Portfólio &amp; Serviços</h3>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Expertise que define momentos.</h2>
+          <p class="text-slate-400 text-lg">De coberturas dinâmicas a produções corporativas sofisticadas, cada projeto
+            é tratado com exclusividade e técnica.</p>
+        </div>
+        <a href="#portfolio"
+          class="text-primary font-bold flex items-center gap-2 hover:translate-x-2 transition-transform">
+          Ver Portfólio Completo <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio">
+        <!-- Service Card 1 -->
+        <div
+          class="group relative bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-800 transition-all hover:border-primary/50 reveal">
+          <div class="aspect-video relative overflow-hidden">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              alt="Luxury wedding ceremony setup" src="img/service1.jpg" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80">
+            </div>
+            <div class="absolute bottom-4 left-6">
+              <span class="bg-primary text-white text-[10px] font-black px-2 py-1 rounded uppercase">Social</span>
+            </div>
+          </div>
+          <div class="p-8">
+            <h4 class="text-2xl font-bold text-white mb-3">Cobertura de Eventos</h4>
+            <p class="text-slate-400 mb-6 leading-relaxed">Casamentos, aniversários e festas sociais com foco na
+              espontaneidade e emoção.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> 2-3 Câmeras 4K
+              </li>
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> Drone incluso
+              </li>
+            </ul>
+            <button
+              class="w-full py-3 rounded-lg border border-slate-700 text-white font-bold text-sm hover:bg-primary hover:border-primary transition-colors">Saiba
+              Mais</button>
+          </div>
+        </div>
+        <!-- Service Card 2 -->
+        <div
+          class="group relative bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-800 transition-all hover:border-primary/50 reveal reveal-delay-1">
+          <div class="aspect-video relative overflow-hidden">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              alt="Corporate office environment with digital screens" src="img/service2.jpg" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80">
+            </div>
+            <div class="absolute bottom-4 left-6">
+              <span class="bg-primary text-white text-[10px] font-black px-2 py-1 rounded uppercase">Business</span>
+            </div>
+          </div>
+          <div class="p-8">
+            <h4 class="text-2xl font-bold text-white mb-3">Vídeos Corporativos</h4>
+            <p class="text-slate-400 mb-6 leading-relaxed">Filmes institucionais, treinamentos e cobertura de congressos
+              com estética profissional.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> Entrevistas e
+                Depoimentos
+              </li>
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> Edição Dinâmica
+              </li>
+            </ul>
+            <button
+              class="w-full py-3 rounded-lg border border-slate-700 text-white font-bold text-sm hover:bg-primary hover:border-primary transition-colors">Saiba
+              Mais</button>
+          </div>
+        </div>
+        <!-- Service Card 3 -->
+        <div
+          class="group relative bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-800 transition-all hover:border-primary/50 reveal reveal-delay-2">
+          <div class="aspect-video relative overflow-hidden">
+            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              alt="Live streaming broadcast setup with multi-monitors" src="img/service3.jpg" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80">
+            </div>
+            <div class="absolute bottom-4 left-6">
+              <span class="bg-primary text-white text-[10px] font-black px-2 py-1 rounded uppercase">Live</span>
+            </div>
+          </div>
+          <div class="p-8">
+            <h4 class="text-2xl font-bold text-white mb-3">Transmissão ao Vivo</h4>
+            <p class="text-slate-400 mb-6 leading-relaxed">Streaming profissional para plataformas simultâneas com
+              cortes em tempo real.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> Multi-streaming 1080p
+              </li>
+              <li class="flex items-center gap-3 text-sm text-slate-300">
+                <span class="material-symbols-outlined text-primary text-lg">check_circle</span> Internet redundante
+              </li>
+            </ul>
+            <button
+              class="w-full py-3 rounded-lg border border-slate-700 text-white font-bold text-sm hover:bg-primary hover:border-primary transition-colors">Saiba
+              Mais</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Section -->
+  <section id="cta" class="py-20 px-6 bg-primary">
+    <div class="max-w-4xl mx-auto text-center reveal">
+      <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Pronto para eternizar seu próximo evento?</h2>
+      <p class="text-white/80 text-xl mb-10 max-w-2xl mx-auto">
+        Entre em contato hoje e solicite um orçamento personalizado para o seu projeto.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/5511999999999"
+          class="bg-white text-primary px-10 py-4 rounded-xl font-bold text-lg hover:bg-accent-beige transition-all shadow-2xl w-full sm:w-auto text-center">
+          Falar via WhatsApp
+        </a>
+        <a href="mailto:contato@lumenframe.com"
+          class="bg-transparent border-2 border-white/30 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all w-full sm:w-auto text-center">
+          Enviar E-mail
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contato" class="bg-background-dark py-16 px-6 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-primary p-2 rounded-lg text-white">
+            <span class="material-symbols-outlined text-xl">filter_tilt_shift</span>
+          </div>
+          <h1 class="text-lg font-bold tracking-tight text-white uppercase">Lumen Frame</h1>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          A excelência visual que seu momento merece. Especialistas em produções de alto impacto.
+        </p>
+        <div class="flex gap-4">
+          <a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-all"
+            href="#">
+            <span class="material-symbols-outlined">public</span>
+          </a>
+          <a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-all"
+            href="#">
+            <span class="material-symbols-outlined">videocam</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h5 class="text-white font-bold mb-6">Links Rápidos</h5>
+        <ul class="space-y-4">
+          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#sobre">Sobre Nós</a></li>
+          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#portfolio">Portfólio</a>
+          </li>
+          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#servicos">Serviços</a></li>
+          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#">Blog Audiovisual</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-white font-bold mb-6">Contato</h5>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3 text-slate-400 text-sm">
+            <span class="material-symbols-outlined text-primary">location_on</span>
+            São Paulo, SP - Brasil
+          </li>
+          <li class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="material-symbols-outlined text-primary">mail</span>
+            contato@lumenframe.com
+          </li>
+          <li class="flex items-center gap-3 text-slate-400 text-sm">
+            <span class="material-symbols-outlined text-primary">phone</span>
+            +55 11 99999-9999
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-white font-bold mb-6">Newsletter</h5>
+        <p class="text-slate-400 text-sm mb-4">Receba novidades e bastidores de nossas produções.</p>
+        <form class="flex gap-2" onsubmit="handleNewsletter(event)">
+          <input
+            class="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none text-white"
+            placeholder="Seu e-mail" type="email" id="newsletter-email" />
+          <button type="submit" class="bg-primary text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <span class="material-symbols-outlined">send</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div
+      class="max-w-7xl mx-auto pt-16 mt-16 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="text-slate-500 text-xs">© 2024 Lumen Frame. Todos os direitos reservados.</p>
+      <div class="flex gap-8">
+        <a class="text-slate-500 text-xs hover:text-slate-300" href="#">Termos de Uso</a>
+        <a class="text-slate-500 text-xs hover:text-slate-300" href="#">Privacidade</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
