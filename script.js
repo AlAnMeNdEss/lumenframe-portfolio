@@ -103,6 +103,9 @@ ScrollTrigger.create({
 function animateHero() {
     const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
+    // Split text for dynamic animation
+    const heroTitle = new SplitType('#hero h2', { types: 'chars, words' });
+
     heroTl
         .from('#navbar', {
             y: -80,
@@ -115,10 +118,12 @@ function animateHero() {
             scale: 0.8,
             duration: 0.6,
         }, '-=0.3')
-        .from('#hero h2', {
+        .from(heroTitle.chars, {
             y: 80,
             opacity: 0,
-            duration: 1,
+            stagger: 0.02,
+            duration: 0.8,
+            ease: "back.out(1.5)"
         }, '-=0.4')
         .from('#hero p', {
             y: 40,

@@ -9,8 +9,12 @@
   <meta name="description"
     content="Lumen Frame — Produtora audiovisual especializada em cobertura de eventos, vídeos corporativos e transmissão ao vivo com qualidade cinematográfica." />
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@500;700;800&display=swap"
     rel="stylesheet" />
+  <script src="https://unpkg.com/split-type"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
     rel="stylesheet" />
@@ -29,7 +33,8 @@
             "background-dark": "#101622",
           },
           fontFamily: {
-            "display": ["Space Grotesk", "sans-serif"]
+            "display": ["Syne", "sans-serif"],
+            "body": ["Inter", "sans-serif"]
           },
           borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
         },
@@ -38,7 +43,22 @@
   </script>
   <style>
     body {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-display {
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* Fix for SplitType */
+    .char {
+      display: inline-block;
     }
 
     .hero-overlay {
