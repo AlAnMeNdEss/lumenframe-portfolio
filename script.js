@@ -226,6 +226,27 @@ document.querySelectorAll('#sobre .rounded-2xl img').forEach((img, i) => {
     });
 });
 
+// ===== INSTAGRAM REEL SECTION =====
+gsap.from('#apresentacao-video h3', {
+    x: -60, opacity: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#apresentacao-video', start: 'top 75%' }
+});
+
+gsap.from('#apresentacao-video h2', {
+    y: 60, opacity: 0, duration: 1,
+    scrollTrigger: { trigger: '#apresentacao-video', start: 'top 70%' }
+});
+
+gsap.from('#apresentacao-video p', {
+    y: 40, opacity: 0, duration: 0.8,
+    scrollTrigger: { trigger: '#apresentacao-video', start: 'top 80%' }
+});
+
+gsap.from('#apresentacao-video .relative.flex-shrink-0', {
+    y: 80, opacity: 0, scale: 0.9, rotate: -2, duration: 1, ease: 'back.out(1.5)',
+    scrollTrigger: { trigger: '#apresentacao-video', start: 'top 75%' }
+});
+
 // ===== SERVICES SECTION =====
 gsap.from('#servicos h3', {
     x: -40, opacity: 0, duration: 0.6,
