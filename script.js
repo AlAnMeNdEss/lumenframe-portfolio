@@ -1,6 +1,6 @@
 /* ===== LUMEN FRAME — GSAP Animations ===== */
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // ===== LOADING SCREEN =====
 const loaderTl = gsap.timeline();
@@ -103,8 +103,9 @@ ScrollTrigger.create({
 function animateHero() {
     const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    // Split text for dynamic animation
-    const heroTitle = new SplitType('#hero h2', { types: 'chars, words' });
+    // Set buttons and indicator hidden initially
+    gsap.set('#hero .flex a, #hero .flex button', { y: 30, opacity: 0 });
+    gsap.set('.animate-bounce', { opacity: 0, y: -20 });
 
     heroTl
         .from('#navbar', {
@@ -112,34 +113,52 @@ function animateHero() {
             opacity: 0,
             duration: 0.8,
         })
-        .from('#hero span:first-child', {
+        .from('#hero div.relative.z-20 > span.inline-block', {
             y: 30,
             opacity: 0,
             scale: 0.8,
             duration: 0.6,
         }, '-=0.3')
-        .from(heroTitle.chars, {
-            y: 80,
-            opacity: 0,
-            stagger: 0.02,
-            duration: 0.8,
-            ease: "back.out(1.5)"
-        }, '-=0.4')
-        .from('#hero p', {
-            y: 40,
-            opacity: 0,
-            duration: 0.7,
-        }, '-=0.5')
-        .from('#hero .flex a, #hero .flex button', {
-            y: 30,
-            opacity: 0,
-            stagger: 0.15,
-            duration: 0.6,
-        }, '-=0.3')
-        .from('.animate-bounce', {
-            opacity: 0,
-            y: -20,
-            duration: 0.5,
+        .add(() => {
+            // 1. Type Title
+            new Typed('#typed-title', {
+                strings: ['Capturando a <span class="text-primary italic">essência</span> do seu momento.'],
+                typeSpeed: 45,
+                showCursor: true,
+                cursorChar: '|',
+                onComplete: (self) => {
+                    self.cursor.style.display = 'none'; // hide cursor when done
+
+                    // 2. Type Description
+                    new Typed('#typed-desc', {
+                        strings: ['Vídeos que conectam, emocionam e transformam memórias em legados visuais inesquecíveis.'],
+                        typeSpeed: 25,
+                        showCursor: true,
+                        cursorChar: '|',
+                        onComplete: (descSelf) => {
+                            descSelf.cursor.style.display = 'none';
+                        }
+                    });
+
+                    // 3. Show Buttons as description starts typing
+                    gsap.to('#hero .flex a, #hero .flex button', {
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.15,
+                        duration: 0.6,
+                        ease: 'power3.out'
+                    });
+                    gsap.to('.animate-bounce', {
+                        opacity: 0.5,
+                        y: 0,
+                        duration: 0.5,
+                        onComplete: () => {
+                            // restore opacity class logic for bounce
+                            document.querySelector('.animate-bounce').style.opacity = "";
+                        }
+                    });
+                }
+            });
         }, '-=0.2')
         // Ken Burns slow zoom on video
         .to('.hero-video', {
