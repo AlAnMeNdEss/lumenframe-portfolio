@@ -803,7 +803,7 @@
   </style>
 </head>
 
-<body class="bg-background-dark text-slate-100 antialiased">
+<body class="bg-background-dark text-slate-100 antialiased overflow-x-hidden">
 
   <!-- Loading Screen -->
   <div class="loader" id="loader">
@@ -850,7 +850,7 @@
 
   <!-- Hero Section -->
   <section id="hero"
-    class="relative h-screen w-full flex items-center justify-center overflow-hidden pt-20 bg-background-dark">
+    class="relative min-h-[95vh] w-full flex items-center justify-center overflow-hidden pt-32 pb-20 bg-background-dark">
     <!-- Premium 3D Particles Container -->
     <canvas id="hero-canvas" class="absolute inset-0 z-10 pointer-events-none"></canvas>
 
@@ -868,10 +868,10 @@
         class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/5 backdrop-blur-md">
         <span class="text-primary text-xs font-bold uppercase tracking-widest">Excelência em Vídeo</span>
       </div>
-      <h2 class="text-5xl md:text-8xl font-black text-white mb-10 leading-[1] tracking-tighter">
-        Capturando a <br><i class="gradient-text italic font-serif">essência</i> <br>do seu momento.
+      <h2 class="text-4xl md:text-6xl font-black text-white mb-8 leading-[1.1] tracking-tighter">
+        Capturando a <i class="gradient-text italic font-serif">essência</i> <br>do seu momento.
       </h2>
-      <p class="text-xl md:text-2xl text-slate-300 mb-14 max-w-2xl font-light leading-relaxed">
+      <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl font-light leading-relaxed">
         Filmes que conectam, emocionam e transformam memórias em legados visuais inesquecíveis.
       </p>
       <div class="flex flex-wrap justify-center gap-6">
@@ -899,7 +899,7 @@
   </section>
 
   <!-- Section Sobre: Realidade Cinematográfica (Sand Background) -->
-  <section id="sobre-detalhe" class="bg-sand py-24 px-6 relative overflow-hidden">
+  <section id="sobre-detalhe" class="bg-sand py-32 px-6 relative overflow-hidden z-20">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
       <!-- Info -->
       <div class="lg:col-span-5 reveal">
@@ -911,34 +911,30 @@
           A Lumen Frame nasceu da paixão por contar histórias de modo único. Somos uma produtora focada em elevar o
           padrão visual de eventos e marcas através de tecnologias 4K e olhar artístico.
         </p>
-        <div class="grid grid-cols-2 gap-8">
-          <div>
-            <span class="text-4xl font-black text-primary block">500+</span>
-            <span class="text-slate-500 text-sm font-bold">Sonhos Filmados</span>
-          </div>
-          <div>
-            <span class="text-4xl font-black text-primary block">10+</span>
-            <span class="text-slate-500 text-sm font-bold">Anos de Histórias</span>
-          </div>
+        <div class="flex gap-4">
+          <a href="https://wa.me/558892542320" target="_blank"
+            class="bg-primary text-white px-8 py-3 rounded-full font-bold transition-all hover:bg-blue-700">Ver
+            Projetos</a>
         </div>
       </div>
       <!-- Image Grid -->
       <div class="lg:col-span-7 grid grid-cols-2 gap-4 reveal reveal-delay-2">
         <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
           <img src="img/service1.jpg"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Process 1">
+            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Lumen Frame Prod">
         </div>
         <div class="aspect-[4/5] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8">
           <img src="img/service2.jpg"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Process 2">
+            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+            alt="Produção Audiovisual">
         </div>
         <div class="aspect-[4/3] rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
           <img src="img/about1.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-            alt="Process 3">
+            alt="Lumen Frame Portfolio">
         </div>
         <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform -translate-y-8">
           <img src="lumen_frame_team_ceo_1773184635069.png"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Process 4">
+            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Nosso Time">
         </div>
       </div>
     </div>
