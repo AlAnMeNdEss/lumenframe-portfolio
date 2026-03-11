@@ -819,7 +819,7 @@
       <span class="material-symbols-outlined">close</span>
     </button>
     <video id="modal-video" controls controlsList="nodownload" style="display:none;">
-      <source src="video do header.mp4" type="video/mp4" />
+      <source src="header-video.mp4" type="video/mp4" />
     </video>
   </div>
 
@@ -856,7 +856,7 @@
 
     <!-- Video element (used as texture for 3D, visually hidden) -->
     <video id="hero-video-texture" class="sr-only absolute" autoplay muted loop playsinline crossorigin="anonymous">
-      <source src="video do header.mp4" type="video/mp4">
+      <source src="header-video.mp4" type="video/mp4">
     </video>
 
     <!-- Gradient Overlay -->
@@ -887,9 +887,9 @@
     </div>
 
     <!-- Video Stage Background (Fixed 3D Perspective) -->
-    <div class="absolute inset-0 z-10 pointer-events-none overflow-hidden h-full w-full opacity-40">
-      <video class="w-full h-full object-cover scale-110 blur-sm" autoplay muted loop playsinline>
-        <source src="video do header.mp4" type="video/mp4">
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full opacity-90">
+      <video class="w-full h-full object-cover" autoplay muted loop playsinline>
+        <source src="header-video.mp4" type="video/mp4">
       </video>
     </div>
     <!-- Scroll Indicator -->
@@ -902,12 +902,12 @@
   <section id="sobre-detalhe" class="bg-sand py-32 px-6 relative overflow-hidden z-20">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
       <!-- Info -->
-      <div class="lg:col-span-5 reveal">
+      <div class="lg:col-span-6 reveal pr-8">
         <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Visão & Legado</span>
-        <h2 class="text-4xl md:text-6xl font-black text-onyx mb-8 tracking-tighter">
+        <h2 class="text-3xl md:text-5xl font-black text-onyx mb-8 tracking-tighter leading-tight">
           Transformamos visão em realidade cinematográfica.
         </h2>
-        <p class="text-lg text-slate-600 mb-10 leading-relaxed">
+        <p class="text-lg text-slate-600 mb-10 leading-relaxed max-w-lg">
           A Lumen Frame nasceu da paixão por contar histórias de modo único. Somos uma produtora focada em elevar o
           padrão visual de eventos e marcas através de tecnologias 4K e olhar artístico.
         </p>
@@ -918,23 +918,22 @@
         </div>
       </div>
       <!-- Image Grid -->
-      <div class="lg:col-span-7 grid grid-cols-2 gap-4 reveal reveal-delay-2">
+      <div class="lg:col-span-6 grid grid-cols-2 gap-4 reveal reveal-delay-2">
         <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
-          <img src="img/service1.jpg"
+          <img src="img/media-1.png"
             class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Lumen Frame Prod">
         </div>
         <div class="aspect-[4/5] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8">
-          <img src="img/service2.jpg"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-            alt="Produção Audiovisual">
+          <img src="img/director.png"
+            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Diretor Criativo">
         </div>
         <div class="aspect-[4/3] rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
-          <img src="img/about1.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-            alt="Lumen Frame Portfolio">
+          <img src="img/editor.png" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+            alt="Edição Profissional">
         </div>
         <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform -translate-y-8">
-          <img src="lumen_frame_team_ceo_1773184635069.png"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Nosso Time">
+          <img src="img/ceo.png" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+            alt="Equipe Lumen">
         </div>
       </div>
     </div>
@@ -1285,7 +1284,7 @@
       </div>
 
       <div class="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <p class="text-slate-500 text-sm">© 2024 Lumen Frame. Criatividade sem limites.</p>
+        <p class="text-slate-500 text-sm">© 2026 Lumen Frame. Criatividade sem limites.</p>
         <div class="flex gap-8 text-slate-500 text-sm">
           <a href="#" class="hover:text-white transition-colors">Termos</a>
           <a href="#" class="hover:text-white transition-colors">Privacidade</a>
