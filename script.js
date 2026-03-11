@@ -1223,8 +1223,8 @@ window.addEventListener('load', () => {
         window.open(`https://wa.me/558892542320?text=${encoded}`, '_blank');
     };
 
-    // ===== UX DESIGN PRO MAX: 3D VIDEO OBJECT (LUMEN EYE) =====
-    (function initPremium3DNativo() {
+    // ===== UX DESIGN PRO MAX: 3D PARTICLES & VIDEO PARALLAX =====
+    (function initPremiumHero() {
         const canvas = document.getElementById('hero-canvas');
         if (!canvas) return;
 
@@ -1234,47 +1234,22 @@ window.addEventListener('load', () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Video Texture
-        const video = document.getElementById('hero-video-texture');
-        const videoTexture = new THREE.VideoTexture(video);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBAFormat;
-
         // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
-
-        const pointLight = new THREE.PointLight(0x0b50da, 3, 50);
-        pointLight.position.set(10, 5, 5);
+        const pointLight = new THREE.PointLight(0x0b50da, 2, 50);
+        pointLight.position.set(5, 5, 5);
         scene.add(pointLight);
 
-        // Core Object: The Video Sphere (Lumen Eye)
-        const geometry = new THREE.SphereGeometry(2.5, 64, 64);
-        const material = new THREE.MeshPhysicalMaterial({
-            map: videoTexture,
-            roughness: 0.1,
-            metalness: 0.2,
-            transmission: 0.5, // Efeito de vidro
-            thickness: 1.5,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-            ior: 1.5,
-        });
-
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.set(4, 0, 0); // Posiciona na direita
-        scene.add(sphere);
-
-        // Background Particles
-        const particlesCount = 200;
+        // Background Particles (Floating Bokeh)
+        const particlesCount = 150;
         const pPositions = new Float32Array(particlesCount * 3);
         for (let i = 0; i < particlesCount * 3; i++) {
-            pPositions[i] = (Math.random() - 0.5) * 30;
+            pPositions[i] = (Math.random() - 0.5) * 20;
         }
         const pGeom = new THREE.BufferGeometry();
         pGeom.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.03, color: 0x0b50da, transparent: true, opacity: 0.5 });
+        const pMat = new THREE.PointsMaterial({ size: 0.05, color: 0x0b50da, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
         const particles = new THREE.Points(pGeom, pMat);
         scene.add(particles);
 
@@ -1282,28 +1257,40 @@ window.addEventListener('load', () => {
 
         // Interaction
         let mouseX = 0, mouseY = 0;
+        const videoCard = document.querySelector('.video-3d-card');
+        const mainVideo = document.getElementById('hero-main-video');
+
+        // Ensure video is playing
+        if (mainVideo) {
+            mainVideo.play().catch(e => console.log("Autoplay blocked or video missing"));
+        }
+
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+            // 3D CSS Card Parallax
+            if (videoCard) {
+                gsap.to(videoCard, {
+                    rotateY: mouseX * 15,
+                    rotateX: -mouseY * 15,
+                    x: mouseX * 10,
+                    y: mouseY * 10,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                });
+            }
         });
 
         function animate() {
             requestAnimationFrame(animate);
+            particles.rotation.y += 0.001;
+            particles.rotation.z += 0.0005;
 
-            // Sphere Animation
-            sphere.rotation.y += 0.005;
-            sphere.position.y = Math.sin(Date.now() * 0.001) * 0.2;
-
-            // Mouse Parallax
-            const targetX = 4 + mouseX * 2;
-            const targetY = -mouseY * 2;
-            sphere.position.x += (targetX - sphere.position.x) * 0.05;
-            sphere.position.y += (targetY - sphere.position.y) * 0.05;
-
-            sphere.rotation.x = mouseY * 0.5;
-            sphere.rotation.z = -mouseX * 0.2;
-
-            particles.rotation.y += 0.0005;
+            // Gentle camera movement
+            camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
 
             renderer.render(scene, camera);
         }

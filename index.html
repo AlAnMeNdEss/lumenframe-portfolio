@@ -609,11 +609,13 @@
       transform: scale(1.1);
     }
 
-    /* Spline 3D Viewer */
-    spline-viewer {
-      width: 100%;
-      height: 100%;
-      background: transparent !important;
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+
+    .video-3d-card {
+      transition: transform 0.3s ease-out;
+      transform-style: preserve-3d;
     }
 
 
@@ -704,11 +706,11 @@
   <!-- Hero Section -->
   <section id="hero"
     class="relative h-screen w-full flex items-center justify-center overflow-hidden pt-20 bg-background-dark">
-    <!-- Premium 3D & Video Scene Container -->
-    <canvas id="hero-canvas" class="absolute inset-0 z-10"></canvas>
+    <!-- Premium 3D Particles Container -->
+    <canvas id="hero-canvas" class="absolute inset-0 z-10 pointer-events-none"></canvas>
 
-    <!-- Video element (hidden, used as texture for 3D) -->
-    <video id="hero-video-texture" class="hidden" autoplay muted loop playsinline crossorigin="anonymous">
+    <!-- Video element (used as texture for 3D, visually hidden) -->
+    <video id="hero-video-texture" class="sr-only absolute" autoplay muted loop playsinline crossorigin="anonymous">
       <source src="video do header.mp4" type="video/mp4">
     </video>
 
@@ -726,10 +728,10 @@
           <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
           <span class="text-primary text-xs font-bold uppercase tracking-widest">Cinema & Impacto</span>
         </div>
-        <h2 class="text-6xl md:text-8xl font-black text-white mb-8 leading-[1] tracking-tighter">
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
           <span id="typed-title"></span>
         </h2>
-        <p class="text-xl text-slate-400 mb-12 max-w-xl font-light leading-relaxed">
+        <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-xl font-light leading-relaxed">
           <span id="typed-desc"></span>
         </p>
         <div class="flex flex-col sm:flex-row items-center gap-6">
@@ -745,9 +747,22 @@
         </div>
       </div>
 
-      <!-- Coluna da Direita: Visual 3D -->
-      <div class="relative h-[600px] lg:h-[700px] flex items-center justify-center lg:block hidden">
-        <!-- O Visual Three.js será renderizado no hero-canvas ocupando esta área visualmente -->
+      <!-- Coluna da Direita: Visual 3D Pro Max -->
+      <div class="relative h-[400px] lg:h-[600px] flex items-center justify-center">
+        <!-- Video Frame with 3D Effect -->
+        <div id="video-3d-container" class="relative w-full h-full max-w-md mx-auto perspective-1000">
+          <div
+            class="video-3d-card w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-primary/20 border border-white/10 bg-slate-900">
+            <video id="hero-main-video" class="w-full h-full object-cover" autoplay muted loop playsinline>
+              <source src="video do header.mp4" type="video/mp4">
+            </video>
+            <!-- Reflection/Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent pointer-events-none"></div>
+          </div>
+          <!-- Floating Elements behind/around -->
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+        </div>
       </div>
     </div>
     <!-- Scroll Indicator -->
