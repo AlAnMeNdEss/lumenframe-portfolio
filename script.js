@@ -1195,136 +1195,108 @@ window.addEventListener('load', () => {
         });
     };
 
-    // ===== BRIEFING FORM MULTI-STEP =====
-    window.nextStep = function (current, next) {
-        if (current < next) {
-            // Validação simples p/ exemplo
-            const input = document.querySelector(`#step-${current} input`);
-            if (input && !input.value) {
-                gsap.to(`#step-${current}`, { x: [-10, 10, -10, 10, 0], duration: 0.4 });
-                return;
-            }
-        }
+    // Middle logic cleaned for Bento system.
 
-        gsap.to(`#step-${current}`, {
-            opacity: 0, x: -20, duration: 0.3, onComplete: () => {
-                document.getElementById(`step-${current}`).classList.remove('active');
-                document.getElementById(`step-${next}`).classList.add('active');
-                gsap.fromTo(`#step-${next}`, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4 });
+    // ===== UX DESIGN PRO MAX: IMMERSIVE 3D STAGE & FLUIDITY =====
+    (function initImmersiveHero() {
+        const stage = document.querySelector('.hero-stage-3d');
+        const videoFrame = document.querySelector('.hero-video-frame');
+        const contentFloat = document.querySelector('.hero-content-float');
 
-                // Update dots
-                document.querySelectorAll('.step-indicator').forEach((dot, i) => {
-                    dot.classList.toggle('active', i < next);
-                });
-            }
-        });
-    };
+        if (!stage) return;
 
-    window.selectStyle = function (style) {
-        window.selectedBriefingStyle = style;
-        const cards = document.querySelectorAll('#step-2 .cursor-pointer');
-        cards.forEach(c => c.style.borderColor = '');
-        event.currentTarget.style.borderColor = '#0b50da';
-    };
-
-    window.submitBriefing = function () {
-        const nome = document.getElementById('b-nome').value;
-        const whats = document.getElementById('b-whatsapp').value;
-        const local = document.getElementById('b-local').value;
-        const data = document.getElementById('b-data').value;
-        const obs = document.getElementById('b-obs').value;
-        const estilo = window.selectedBriefingStyle || "Não definido";
-
-        const text = `🚀 *NOVO BRIEFING - LUMEN FRAME*\n\n` +
-            `👤 *Cliente:* ${nome}\n` +
-            `📱 *WhatsApp:* ${whats}\n` +
-            `🎬 *Estilo:* ${estilo}\n` +
-            `📍 *Local:* ${local}\n` +
-            `📅 *Data:* ${data}\n` +
-            `📝 *Prioridades:* ${obs}`;
-
-        const encoded = encodeURIComponent(text);
-        window.open(`https://wa.me/558892542320?text=${encoded}`, '_blank');
-    };
-
-    // ===== UX DESIGN PRO MAX: 3D PARTICLES & VIDEO PARALLAX =====
-    (function initPremiumHero() {
-        const canvas = document.getElementById('hero-canvas');
-        if (!canvas) return;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0x0b50da, 2, 50);
-        pointLight.position.set(5, 5, 5);
-        scene.add(pointLight);
-
-        // Background Particles (Floating Bokeh)
-        const particlesCount = 150;
-        const pPositions = new Float32Array(particlesCount * 3);
-        for (let i = 0; i < particlesCount * 3; i++) {
-            pPositions[i] = (Math.random() - 0.5) * 20;
-        }
-        const pGeom = new THREE.BufferGeometry();
-        pGeom.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.05, color: 0x0b50da, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
-        const particles = new THREE.Points(pGeom, pMat);
-        scene.add(particles);
-
-        camera.position.z = 8;
-
-        // Interaction
         let mouseX = 0, mouseY = 0;
-        const videoCard = document.querySelector('.video-3d-card');
-        const mainVideo = document.getElementById('hero-main-video');
-
-        // Ensure video is playing
-        if (mainVideo) {
-            mainVideo.play().catch(e => console.log("Autoplay blocked or video missing"));
-        }
+        let targetX = 0, targetY = 0;
 
         window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
 
-            // 3D CSS Card Parallax
-            if (videoCard) {
-                gsap.to(videoCard, {
-                    rotateY: mouseX * 15,
-                    rotateX: -mouseY * 15,
-                    x: mouseX * 10,
+        function update3D() {
+            // Smoothler interpolation
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+
+            if (videoFrame) {
+                gsap.set(videoFrame, {
+                    rotateY: -15 + (mouseX * 10),
+                    rotateX: 5 - (mouseY * 10),
+                    x: mouseX * 20,
                     y: mouseY * 10,
-                    duration: 0.6,
-                    ease: 'power2.out'
+                    overwrite: true
                 });
             }
-        });
 
-        function animate() {
-            requestAnimationFrame(animate);
-            particles.rotation.y += 0.001;
-            particles.rotation.z += 0.0005;
+            if (contentFloat) {
+                gsap.set(contentFloat, {
+                    x: mouseX * -30,
+                    y: mouseY * -20,
+                    z: 50,
+                    rotateY: mouseX * 5,
+                    overwrite: true
+                });
+            }
 
-            // Gentle camera movement
-            camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            renderer.render(scene, camera);
+            requestAnimationFrame(update3D);
         }
+        update3D();
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        // Fluid Bento Hover Parallax
+        document.querySelectorAll('.bento-item').forEach(item => {
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                gsap.to(item.querySelector('img'), {
+                    x: x * 30,
+                    y: y * 30,
+                    scale: 1.15,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+
+            item.addEventListener('mouseleave', () => {
+                gsap.to(item.querySelector('img'), {
+                    x: 0,
+                    y: 0,
+                    scale: 1.1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
         });
-        animate();
+
+        // Add 3D Particles Background (Legacy preserved & refined)
+        const canvas = document.getElementById('hero-canvas');
+        if (canvas) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const points = [];
+            for (let i = 0; i < 200; i++) {
+                points.push((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+            }
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+            const material = new THREE.PointsMaterial({ size: 0.05, color: 0x0b50da, transparent: true, opacity: 0.4 });
+            const cloud = new THREE.Points(geometry, material);
+            scene.add(cloud);
+            camera.position.z = 10;
+
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                cloud.rotation.y += 0.0005;
+                cloud.rotation.x += 0.0002;
+                renderer.render(scene, camera);
+            }
+            animateParticles();
+        }
     })();
 
 
