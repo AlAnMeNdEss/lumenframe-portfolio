@@ -594,28 +594,109 @@
       }
     }
 
-    /* Estilos para Portais (Cards de Categorias) */
-    .portal-card {
-      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      transform-style: preserve-3d;
+    /* Bento Grid System */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      padding: 20px;
     }
 
-    .portal-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(11, 80, 218, 0.3);
+    .bento-item {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: pointer;
     }
 
-    .portal-card:hover .portal-img {
-      transform: scale(1.1);
+    .bento-item:hover {
+      transform: translateY(-8px) scale(1.01);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(11, 80, 218, 0.2);
     }
 
-    .perspective-1000 {
-      perspective: 1000px;
+    .bento-main {
+      grid-column: span 12;
+      aspect-ratio: 16/9;
     }
 
-    .video-3d-card {
-      transition: transform 0.3s ease-out;
-      transform-style: preserve-3d;
+    .bento-half {
+      grid-column: span 6;
+      aspect-ratio: 1/1;
+    }
+
+    .bento-third {
+      grid-column: span 4;
+      aspect-ratio: 4/5;
+    }
+
+    @media (max-width: 1024px) {
+
+      .bento-half,
+      .bento-third {
+        grid-column: span 12;
+        aspect-ratio: 16/9;
+      }
+    }
+
+    /* Premium Type */
+    .text-glow {
+      text-shadow: 0 0 30px rgba(11, 80, 218, 0.4);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, #0b50da 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Custom Cursor Styles */
+    .custom-cursor {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(11, 80, 218, 0.5);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+
+    .cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: #0b50da;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    .cursor-hover {
+      width: 80px;
+      height: 80px;
+      background: rgba(11, 80, 218, 0.1);
+      border-color: #0b50da;
+    }
+
+    .cursor-dot-hover {
+      transform: translate(-50%, -50%) scale(2);
+    }
+
+    @media (max-width: 1024px) {
+
+      .custom-cursor,
+      .cursor-dot {
+        display: none;
+      }
     }
 
 
@@ -772,67 +853,48 @@
   </section>
 
   <!-- Interactive Portals Section -->
-  <section id="portais" class="py-32 px-6 bg-background-dark relative overflow-hidden">
-    <!-- Depth Particles -->
-    <canvas id="portal-particles" class="absolute inset-0 opacity-40 pointer-events-none"></canvas>
-
-    <div class="max-w-7xl mx-auto relative z-10">
-      <div class="text-center mb-20 reveal">
-        <h3 class="text-primary text-sm font-bold uppercase tracking-widest mb-4">Escolha seu Objetivo</h3>
-        <h2 class="text-5xl md:text-6xl font-black text-white mb-6">Como podemos te ajudar hoje?</h2>
-        <p class="text-slate-400 text-xl max-w-3xl mx-auto">Separamos nossa expertise em dois portais exclusivos para
-          entregar a melhor experiência para sua necessidade.</p>
+  <!-- Bento Portfolio Portals -->
+  <section id="portais" class="py-32 bg-background-dark relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="reveal mb-20 text-center">
+        <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">Nossos <span class="gradient-text">Universos</span>
+        </h2>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto">Soluções audiovisuais personalizadas para cada necessidade,
+          do mundo corporativo aos seus momentos mais especiais.</p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-12">
-        <!-- Portal Corporativo -->
-        <div class="portal-card group relative h-[500px] rounded-[2rem] overflow-hidden cursor-pointer"
-          onclick="openPortal('corporativo')">
-          <img src="img/service2.jpg"
-            class="portal-img absolute inset-0 w-full h-full object-cover transition-transform duration-700 opacity-60"
-            alt="Corporativo">
+      <div class="bento-grid">
+        <!-- Portal Empresas -->
+        <div onclick="document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})"
+          class="bento-item bento-half group relative">
+          <img src="img/service1.jpg" alt="Corporativo"
+            class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700">
           <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/20 to-transparent">
           </div>
-          <div
-            class="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 transition-all rounded-[2rem]">
-          </div>
-
-          <div class="absolute bottom-12 left-12 right-12 transition-transform duration-500 group-hover:-translate-y-4">
-            <span
-              class="bg-primary/20 text-primary px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block backdrop-blur-md">Para
-              sua Empresa</span>
-            <h3 class="text-4xl font-bold text-white mb-4">Negócios & Corporativo</h3>
-            <p class="text-slate-300 text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              Vídeos institucionais, treinamentos, congressos e lives profissionais. Eleve o padrão da sua marca.
-            </p>
-            <div class="mt-8 flex items-center gap-3 text-primary font-bold">
-              VER PORTFÓLIO <span class="material-symbols-outlined">arrow_forward</span>
+          <div class="absolute bottom-10 left-10 right-10">
+            <span class="text-primary font-bold tracking-widest text-xs uppercase mb-3 block">B2B & Growth</span>
+            <h3 class="text-3xl font-bold text-white mb-4">Para sua Empresa</h3>
+            <p class="text-slate-300 mb-6">Institucionais, Comerciais e Treinamentos que convertem e fortalecem sua
+              marca.</p>
+            <div class="flex items-center gap-2 text-white font-bold group-hover:gap-4 transition-all">
+              Ver Portfolio <span class="material-symbols-outlined">arrow_forward</span>
             </div>
           </div>
         </div>
 
-        <!-- Portal Social/Eventos -->
-        <div class="portal-card group relative h-[500px] rounded-[2rem] overflow-hidden cursor-pointer"
-          onclick="openPortal('eventos')">
-          <img src="img/service1.jpg"
-            class="portal-img absolute inset-0 w-full h-full object-cover transition-transform duration-700 opacity-60"
-            alt="Eventos">
+        <!-- Portal Momentos -->
+        <div onclick="document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})"
+          class="bento-item bento-half group relative">
+          <img src="img/service2.jpg" alt="Momentos"
+            class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700">
           <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/20 to-transparent">
           </div>
-          <div
-            class="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 transition-all rounded-[2rem]">
-          </div>
-
-          <div class="absolute bottom-12 left-12 right-12 transition-transform duration-500 group-hover:-translate-y-4">
-            <span
-              class="bg-blue-400/20 text-blue-400 px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block backdrop-blur-md">Para
-              seu Momento</span>
-            <h3 class="text-4xl font-bold text-white mb-4">Eventos, Festas & Social</h3>
-            <p class="text-slate-300 text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              Casamentos, aniversários de 15 anos e coberturas sociais com sensibilidade e arte.
-            </p>
-            <div class="mt-8 flex items-center gap-3 text-blue-400 font-bold">
-              VER PORTFÓLIO <span class="material-symbols-outlined">arrow_forward</span>
+          <div class="absolute bottom-10 left-10 right-10">
+            <span class="text-blue-400 font-bold tracking-widest text-xs uppercase mb-3 block">Life & Legacy</span>
+            <h3 class="text-3xl font-bold text-white mb-4">Para seu Momento</h3>
+            <p class="text-slate-300 mb-6">Cobertura de eventos, aniversários e documentários pessoais eternizados.</p>
+            <div class="flex items-center gap-2 text-white font-bold group-hover:gap-4 transition-all">
+              Ver Portfolio <span class="material-symbols-outlined">arrow_forward</span>
             </div>
           </div>
         </div>
@@ -1142,193 +1204,223 @@
   </section>
 
   <!-- FAQ Section -->
-  <section id="faq" class="py-24 px-6 bg-slate-950 relative overflow-hidden border-t border-slate-800">
+  <section id="faq" class="py-32 px-6 bg-background-dark relative overflow-hidden border-t border-white/5">
     <div class="max-w-4xl mx-auto reveal">
       <div class="text-center mb-16">
-        <h3 class="text-primary text-sm font-bold uppercase tracking-widest mb-4">Dúvidas Frequentes</h3>
-        <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Como podemos ajudar?</h2>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">FAQ e <span class="gradient-text">Dúvidas</span></h2>
+        <p class="text-slate-400">Tudo o que você precisa saber antes de darmos o primeiro take.</p>
       </div>
 
       <div class="space-y-4">
         <details
-          class="group contact-glass-card rounded-xl border border-slate-800/50 open:border-primary/50 transition-colors">
+          class="group bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 open:border-primary/50 transition-all duration-300">
           <summary
-            class="flex justify-between items-center font-medium cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
-            Qual é a antecedência ideal para fechar um evento?
+            class="flex justify-between items-center font-bold cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
+            Qual é a antecedência ideal para fechar um vídeo?
             <span class="material-symbols-outlined transition duration-300 group-open:-scale-y-100">expand_more</span>
           </summary>
           <div class="text-slate-400 px-6 pb-6 leading-relaxed">
-            Recomendamos o contato o quanto antes para garantir a reserva da data, mas somos flexíveis e buscamos
-            atender mesmo projetos de última hora conforme disponibilidade da equipe.
+            Não exigimos meses de antecedência. Somos ágeis e flexíveis. Se tivermos disponibilidade na agenda, podemos
+            fechar e produzir seu projeto em poucos dias. O importante é o resultado final.
           </div>
         </details>
+
         <details
-          class="group contact-glass-card rounded-xl border border-slate-800/50 open:border-primary/50 transition-colors">
+          class="group bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 open:border-primary/50 transition-all duration-300">
           <summary
-            class="flex justify-between items-center font-medium cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
-            Vocês atendem em quais regiões?
+            class="flex justify-between items-center font-bold cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
+            Vocês são de São Paulo? Atendem em quais regiões?
             <span class="material-symbols-outlined transition duration-300 group-open:-scale-y-100">expand_more</span>
           </summary>
           <div class="text-slate-400 px-6 pb-6 leading-relaxed">
-            Sim! Atendemos em todo o estado do Ceará, com foco na região do Cariri, e também realizamos projetos em todo
-            o Brasil.
+            Não somos de São Paulo. Nossa base principal é no **Ceará (Região do Cariri)**, mas temos mobilidade total
+            para realizar produções em qualquer lugar do Brasil e do mundo.
           </div>
         </details>
+
         <details
-          class="group contact-glass-card rounded-xl border border-slate-800/50 open:border-primary/50 transition-colors">
+          class="group bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 open:border-primary/50 transition-all duration-300">
           <summary
-            class="flex justify-between items-center font-medium cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
-            Como funciona a entrega do material final?
+            class="flex justify-between items-center font-bold cursor-pointer p-6 text-white group-open:text-primary transition-colors focus:outline-none">
+            Como funciona a entrega do material?
             <span class="material-symbols-outlined transition duration-300 group-open:-scale-y-100">expand_more</span>
           </summary>
           <div class="text-slate-400 px-6 pb-6 leading-relaxed">
-            Todo o material finalizado é entregue primariamente de forma digital via nuvem (Google Drive/Vimeo) em alta
-            resolução (4K ou 1080p). Dependendo do pacote, também oferecemos entrega física em pendrives personalizados.
+            Entregamos tudo via nuvem em **altíssima resolução (4K)**. Você recebe um link exclusivo para download e
+            visualização, facilitando o compartilhamento e a preservação da qualidade original.
           </div>
         </details>
       </div>
     </div>
   </section>
 
-  <!-- Redesigned Cinematic Contact Section -->
-  <section id="contatar"
-    class="py-24 px-6 bg-[url('img/service3.jpg')] bg-cover bg-center bg-fixed relative overflow-hidden">
-    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md"></div>
-    <div class="max-w-6xl mx-auto relative z-10 grid md:grid-cols-2 gap-16 items-center">
-      <div class="reveal">
-        <h3 class="text-primary text-sm font-bold uppercase tracking-widest mb-4">Contato</h3>
-        <h2 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
-          Pronto para <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">dar o
-            play?</span>
-        </h2>
-        <p class="text-slate-300 text-lg mb-10 max-w-lg leading-relaxed">
-          Preencha o formulário para receber uma proposta personalizada focada na sua visão e nas necessidades do seu
-          projeto audiovisual.
-        </p>
+  <!-- Briefing Inteligente Section -->
+  <section id="briefing" class="py-32 bg-slate-950 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16 reveal">
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Briefing <span
+            class="gradient-text">Inteligente</span></h2>
+        <p class="text-slate-400">Conte-nos sua ideia em 1 minuto e receba uma proposta personalizada.</p>
+      </div>
 
-        <div class="flex gap-6 mb-8">
+      <div class="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+        <div class="flex justify-between mb-12 relative">
+          <div class="absolute top-1/2 left-0 w-full h-0.5 bg-white/10 -translate-y-1/2"></div>
+          <div id="briefing-progress"
+            class="absolute top-1/2 left-0 w-0 h-0.5 bg-primary -translate-y-1/2 transition-all duration-500"></div>
           <div
-            class="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/30 text-primary">
-            <span class="material-symbols-outlined text-3xl">chat</span>
-          </div>
-          <div>
-            <h4 class="text-white font-bold text-lg">WhatsApp</h4>
-            <p class="text-slate-400">+55 88 9254-2320</p>
-          </div>
+            class="step-indicator active relative z-10 w-10 h-10 rounded-full bg-slate-800 border-2 border-primary flex items-center justify-center text-white font-bold transition-all"
+            data-step="1">1</div>
+          <div
+            class="step-indicator relative z-10 w-10 h-10 rounded-full bg-slate-800 border-2 border-white/10 flex items-center justify-center text-white font-bold transition-all"
+            data-step="2">2</div>
+          <div
+            class="step-indicator relative z-10 w-10 h-10 rounded-full bg-slate-800 border-2 border-white/10 flex items-center justify-center text-white font-bold transition-all"
+            data-step="3">3</div>
         </div>
-      </div>
 
-      <div class="reveal reveal-delay-1">
-        <form id="hero-contact-form" class="contact-glass-card p-10 md:p-12 rounded-[2rem] shadow-2xl space-y-6">
-          <div class="grid grid-cols-2 gap-6">
-            <div class="space-y-2">
-              <label class="text-slate-300 text-sm font-bold ml-1">Nome Completo</label>
-              <input id="form-nome" type="text" required
-                class="w-full bg-slate-900/50 contact-input rounded-xl px-4 py-3" placeholder="Seu nome" />
+        <form id="briefing-form" onsubmit="window.submitBriefing(event)">
+          <!-- Step 1: Tipo -->
+          <div class="briefing-step active" data-step="1">
+            <h3 class="text-2xl text-white font-bold mb-8">Qual o foco do projeto?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label
+                class="p-6 rounded-2xl border border-white/10 bg-white/5 cursor-pointer hover:bg-primary/10 hover:border-primary transition-all group">
+                <input type="radio" name="tipo" value="empresa" class="hidden" required>
+                <span class="material-symbols-outlined text-primary mb-3 block">business</span>
+                <span class="text-white font-bold text-lg block mb-1">Empresa / B2B</span>
+                <span class="text-slate-400 text-sm">Institucional, comercial ou evento corporativo.</span>
+              </label>
+              <label
+                class="p-6 rounded-2xl border border-white/10 bg-white/5 cursor-pointer hover:bg-primary/10 hover:border-primary transition-all group">
+                <input type="radio" name="tipo" value="social" class="hidden">
+                <span class="material-symbols-outlined text-blue-400 mb-3 block">celebration</span>
+                <span class="text-white font-bold text-lg block mb-1">Social / Evento</span>
+                <span class="text-slate-400 text-sm">Aniversário, festa ou cobertura social.</span>
+              </label>
             </div>
-            <div class="space-y-2">
-              <label class="text-slate-300 text-sm font-bold ml-1">Telefone/WhatsApp</label>
-              <input id="form-tel" type="tel" required class="w-full bg-slate-900/50 contact-input rounded-xl px-4 py-3"
-                placeholder="(00) 00000-0000" />
+          </div>
+
+          <!-- Step 2: Detalhes -->
+          <div class="briefing-step hidden" data-step="2">
+            <h3 class="text-2xl text-white font-bold mb-8">Conte-nos um pouco mais</h3>
+            <div class="space-y-6">
+              <div>
+                <label class="text-slate-300 text-sm mb-2 block">Duração estimada do vídeo</label>
+                <select name="duracao"
+                  class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary">
+                  <option value="curto">Até 1 minuto (Reels/Shorts)</option>
+                  <option value="medio">2 a 5 minutos</option>
+                  <option value="longo">Mais de 5 minutos</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-slate-300 text-sm mb-2 block">Data prevista do evento/gravação</label>
+                <input type="date" name="data"
+                  class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary">
+              </div>
             </div>
           </div>
-          <div class="space-y-2">
-            <label class="text-slate-300 text-sm font-bold ml-1">Tipo de Projeto</label>
-            <select id="form-tipo" required
-              class="w-full bg-slate-900/50 contact-input rounded-xl px-4 py-3 appearance-none">
-              <option value="" disabled selected>Selecione o tipo de gravação</option>
-              <option value="Casamento">Casamento / Social</option>
-              <option value="Corporativo">Vídeo Corporativo</option>
-              <option value="Evento">Cobertura de Evento</option>
-              <option value="Live">Transmissão ao Vivo</option>
-              <option value="Outro">Outro (Especificar)</option>
-            </select>
+
+          <!-- Step 3: Contato -->
+          <div class="briefing-step hidden" data-step="3">
+            <h3 class="text-2xl text-white font-bold mb-8">Como falamos com você?</h3>
+            <div class="space-y-6">
+              <input type="text" name="nome" placeholder="Seu Nome Completo"
+                class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary"
+                required>
+              <input type="email" name="email" placeholder="Seu Melhor E-mail"
+                class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary"
+                required>
+              <input type="tel" name="whatsapp" placeholder="WhatsApp"
+                class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary"
+                required>
+            </div>
           </div>
-          <div class="space-y-2">
-            <label class="text-slate-300 text-sm font-bold ml-1">Detalhes Adicionais</label>
-            <textarea id="form-detalhes" rows="4"
-              class="w-full bg-slate-900/50 contact-input rounded-xl px-4 py-3 resize-none"
-              placeholder="Conte-nos um pouco sobre data, local e o que imagina..."></textarea>
+
+          <div class="flex justify-between mt-12 gap-4">
+            <button type="button" id="prev-btn"
+              class="hidden px-8 py-4 rounded-xl border border-white/10 text-white font-bold hover:bg-white/5 transition-all">Anterior</button>
+            <button type="button" id="next-btn"
+              class="flex-1 px-8 py-4 rounded-xl bg-primary text-white font-bold hover:bg-blue-700 transition-all">Próximo
+              Passo</button>
+            <button type="submit" id="submit-briefing-btn"
+              class="hidden flex-1 px-8 py-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 shadow-lg shadow-green-900/20 transition-all">Finalizar
+              & Enviar</button>
           </div>
-          <button type="submit"
-            class="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-primary/30 transform hover:-translate-y-1">
-            Solicitar Orçamento <span class="material-symbols-outlined align-middle ml-2 text-sm">arrow_forward</span>
-          </button>
         </form>
       </div>
     </div>
+
+    <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-900/10 blur-[120px] rounded-full"></div>
   </section>
 
-  <!-- Footer -->
-  <footer id="contato" class="bg-background-dark py-16 px-6 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-      <div class="md:col-span-1">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="bg-primary p-2 rounded-lg text-white">
-            <span class="material-symbols-outlined text-xl">filter_tilt_shift</span>
+  <footer id="contato" class="py-24 bg-background-dark border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="bento-grid">
+        <!-- Brand Bento -->
+        <div class="bento-item bento-half p-10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 mb-8">
+              <span class="material-symbols-outlined text-primary text-4xl">filter_tilt_shift</span>
+              <h2 class="text-2xl font-bold text-white tracking-tighter">LUMEN FRAME</h2>
+            </div>
+            <p class="text-slate-400 text-lg leading-relaxed max-w-sm">
+              Eternizando legados através de produções audiovisuais de alto impacto cinematográfico. Da nossa base no
+              Cariri para o mundo.
+            </p>
           </div>
-          <h1 class="text-lg font-bold tracking-tight text-white uppercase">Lumen Frame</h1>
+          <div class="flex gap-4 mt-12">
+            <a href="#"
+              class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary transition-all">
+              <span class="material-symbols-outlined text-xl">videocam</span>
+            </a>
+            <a href="#"
+              class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary transition-all">
+              <span class="material-symbols-outlined text-xl">share</span>
+            </a>
+          </div>
         </div>
-        <p class="text-slate-400 text-sm leading-relaxed mb-6">
-          A excelência visual que seu momento merece. Especialistas em produções de alto impacto.
-        </p>
-        <div class="flex gap-4">
-          <a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-all"
-            href="#">
-            <span class="material-symbols-outlined">public</span>
-          </a>
-          <a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-all"
-            href="#">
-            <span class="material-symbols-outlined">videocam</span>
-          </a>
+
+        <!-- Links Bento -->
+        <div class="bento-item bento-third p-10">
+          <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-sm">Explorar</h4>
+          <ul class="space-y-4">
+            <li><a href="#portfolio" class="text-slate-400 hover:text-white transition-colors">Portfólio</a></li>
+            <li><a href="#sobre" class="text-slate-400 hover:text-white transition-colors">Nossa História</a></li>
+            <li><a href="#servicos" class="text-slate-400 hover:text-white transition-colors">Serviços</a></li>
+            <li><a href="#briefing" class="text-slate-400 hover:text-white transition-colors">Solicitar Orçamento</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Contact Bento -->
+        <div class="bento-item bento-third p-10">
+          <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-sm">Contato</h4>
+          <ul class="space-y-6">
+            <li class="flex gap-4">
+              <span class="material-symbols-outlined text-primary">location_on</span>
+              <span class="text-slate-400">Ceará, Brasil <br>Região do Cariri</span>
+            </li>
+            <li class="flex gap-4 items-center">
+              <span class="material-symbols-outlined text-primary">mail</span>
+              <span class="text-slate-400">contato@lumenframe.com</span>
+            </li>
+            <li class="flex gap-4 items-center">
+              <span class="material-symbols-outlined text-primary">add_call</span>
+              <span class="text-slate-400">+55 88 9254-2320</span>
+            </li>
+          </ul>
         </div>
       </div>
-      <div>
-        <h5 class="text-white font-bold mb-6">Links Rápidos</h5>
-        <ul class="space-y-4">
-          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#sobre">Sobre Nós</a></li>
-          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#portfolio">Portfólio</a>
-          </li>
-          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#servicos">Serviços</a></li>
-          <li><a class="text-slate-400 text-sm hover:text-primary transition-colors" href="#">Blog Audiovisual</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5 class="text-white font-bold mb-6">Contato</h5>
-        <ul class="space-y-4">
-          <li class="flex items-start gap-3 text-slate-400 text-sm">
-            <span class="material-symbols-outlined text-primary">location_on</span>
-            Ceará - Brasil
-          </li>
-          <li class="flex items-center gap-3 text-slate-400 text-sm">
-            <span class="material-symbols-outlined text-primary">mail</span>
-            contato@lumenframe.com
-          </li>
-          <li class="flex items-center gap-3 text-slate-400 text-sm">
-            <span class="material-symbols-outlined text-primary">phone</span>
-            +55 88 9254-2320
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h5 class="text-white font-bold mb-6">Newsletter</h5>
-        <p class="text-slate-400 text-sm mb-4">Receba novidades e bastidores de nossas produções.</p>
-        <form class="flex gap-2" onsubmit="handleNewsletter(event)">
-          <input
-            class="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:ring-1 focus:ring-primary focus:border-primary outline-none text-white"
-            placeholder="Seu e-mail" type="email" id="newsletter-email" />
-          <button type="submit" class="bg-primary text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
-            <span class="material-symbols-outlined">send</span>
-          </button>
-        </form>
-      </div>
-    </div>
-    <div
-      class="max-w-7xl mx-auto pt-16 mt-16 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
-      <p class="text-slate-500 text-xs">© 2024 Lumen Frame. Todos os direitos reservados.</p>
-      <div class="flex gap-8">
-        <a class="text-slate-500 text-xs hover:text-slate-300" href="#">Termos de Uso</a>
-        <a class="text-slate-500 text-xs hover:text-slate-300" href="#">Privacidade</a>
+
+      <div class="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-slate-500 text-sm">© 2024 Lumen Frame. Criatividade sem limites.</p>
+        <div class="flex gap-8 text-slate-500 text-sm">
+          <a href="#" class="hover:text-white transition-colors">Termos</a>
+          <a href="#" class="hover:text-white transition-colors">Privacidade</a>
+        </div>
       </div>
     </div>
   </footer>

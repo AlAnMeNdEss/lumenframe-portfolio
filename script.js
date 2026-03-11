@@ -66,6 +66,32 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) closeVideoModal();
 });
 
+// ===== CUSTOM CURSOR =====
+const cursor = document.createElement('div');
+cursor.className = 'custom-cursor';
+document.body.appendChild(cursor);
+
+const cursorDot = document.createElement('div');
+cursorDot.className = 'cursor-dot';
+document.body.appendChild(cursorDot);
+
+let cursorActive = false;
+window.addEventListener('mousemove', (e) => {
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.5, ease: 'power3.out' });
+    gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power3.out' });
+});
+
+document.querySelectorAll('a, button, .bento-item, .portfolio-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        cursor.classList.add('cursor-hover');
+        cursorDot.classList.add('cursor-dot-hover');
+    });
+    el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('cursor-hover');
+        cursorDot.classList.remove('cursor-dot-hover');
+    });
+});
+
 // ===== NAVBAR HIDE/SHOW ON SCROLL =====
 let lastScrollY = 0;
 const navbar = document.getElementById('navbar');
@@ -77,22 +103,18 @@ ScrollTrigger.create({
 
         if (currentScroll > 120) {
             if (direction === 1) {
-                // Scrolling DOWN → hide
                 navbar.classList.add('hidden-nav');
             } else {
-                // Scrolling UP → show
                 navbar.classList.remove('hidden-nav');
             }
         } else {
-            // At top → always show
             navbar.classList.remove('hidden-nav');
         }
 
-        // Solid bg when scrolled
         if (currentScroll > 100) {
-            navbar.style.backgroundColor = 'rgba(16, 22, 34, 0.95)';
+            navbar.classList.add('glass-nav');
         } else {
-            navbar.style.backgroundColor = 'rgba(16, 22, 34, 0.8)';
+            navbar.classList.remove('glass-nav');
         }
 
         lastScrollY = currentScroll;
@@ -216,6 +238,19 @@ gsap.from('#apresentacao-video .relative.flex-shrink-0', {
     scrollTrigger: { trigger: '#apresentacao-video', start: 'top 75%' }
 });
 
+// ===== BENTO GRID STAGGER =====
+gsap.from('.bento-item', {
+    y: 100,
+    opacity: 0,
+    stagger: 0.2,
+    duration: 1.2,
+    ease: 'power4.out',
+    scrollTrigger: {
+        trigger: '.bento-grid',
+        start: 'top 80%',
+    }
+});
+
 // ===== SERVICES SECTION =====
 gsap.from('#servicos h3', {
     x: -40, opacity: 0, duration: 0.6,
@@ -232,8 +267,8 @@ gsap.from('#servicos > div > div:first-child p', {
     scrollTrigger: { trigger: '#servicos', start: 'top 65%' }
 });
 
-// Service cards stagger
-const serviceCards = document.querySelectorAll('#portfolio > div');
+// Service cards stagger (corrected selector)
+const serviceCards = document.querySelectorAll('.portfolio-card');
 serviceCards.forEach((card, index) => {
     gsap.from(card, {
         y: 100,
@@ -241,24 +276,13 @@ serviceCards.forEach((card, index) => {
         rotateX: 8,
         scale: 0.95,
         duration: 0.9,
-        delay: index * 0.15,
         ease: 'power3.out',
-        scrollTrigger: { trigger: '#portfolio', start: 'top 80%' }
+        scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            toggleActions: 'play none none reverse'
+        }
     });
-
-    const img = card.querySelector('img');
-    if (img) {
-        gsap.to(img, {
-            scale: 1.1,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: card,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 2,
-            }
-        });
-    }
 });
 
 // ===== CTA SECTION =====
@@ -1300,8 +1324,105 @@ window.addEventListener('load', () => {
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
         animate();
+    })();
+
+
+    // ===== BRIEFING INTELIGENTE LOGIC =====
+    (function initBriefingForm() {
+        const form = document.getElementById('briefing-form');
+        const steps = document.querySelectorAll('.briefing-step');
+        const indicators = document.querySelectorAll('.step-indicator');
+        const progress = document.getElementById('briefing-progress');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const submitBtn = document.getElementById('submit-briefing-btn');
+
+        let currentStep = 1;
+        const totalSteps = steps.length;
+
+        function updateForm() {
+            // Update visibility
+            steps.forEach(step => {
+                step.classList.add('hidden');
+                step.classList.remove('active');
+            });
+            const activeStep = document.querySelector(`.briefing-step[data-step="${currentStep}"]`);
+            activeStep.classList.remove('hidden');
+            setTimeout(() => activeStep.classList.add('active'), 50);
+
+            // Update indicators
+            indicators.forEach(ind => {
+                const stepNum = parseInt(ind.dataset.step);
+                if (stepNum <= currentStep) {
+                    ind.classList.add('border-primary', 'bg-slate-800');
+                    ind.classList.add('text-primary');
+                } else {
+                    ind.classList.remove('border-primary', 'text-primary');
+                }
+            });
+
+            // Progress bar
+            const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progress.style.width = `${percent}%`;
+
+            // Buttons visibility
+            prevBtn.classList.toggle('hidden', currentStep === 1);
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+
+            // Stagger animation for step content
+            gsap.from(activeStep.children, {
+                y: 20,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateForm();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateForm();
+            }
+        });
+
+        window.submitBriefing = function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Enviando...';
+
+            // Simulate API call
+            setTimeout(() => {
+                form.innerHTML = `
+                    <div class="text-center py-12 animate-fade-in">
+                        <div class="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="material-symbols-outlined text-4xl">check_circle</span>
+                        </div>
+                        <h3 class="text-2xl text-white font-bold mb-4">Briefing Enviado com Sucesso!</h3>
+                        <p class="text-slate-400">Em breve nossa equipe entrará em contato para dar vida ao seu projeto.</p>
+                        <button onclick="location.reload()" class="mt-8 text-primary font-bold hover:underline">Enviar outro briefing</button>
+                    </div>
+                `;
+                gsap.from(form.children, { scale: 0.8, opacity: 0, duration: 0.5, ease: 'back.out(2)' });
+            }, 2000);
+        };
     })();
 
 
