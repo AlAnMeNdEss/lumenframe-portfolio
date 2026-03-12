@@ -1615,3 +1615,48 @@ window.toggleReelsLike = function (el) {
         setTimeout(() => icon.style.transform = "scale(1)", 150);
     }
 }
+
+// ===== MOBILE MENU LOGIC (Skill: animejs-animation) =====
+document.addEventListener("DOMContentLoaded", () => {
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileIcon = document.getElementById('mobile-menu-icon');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    let menuOpen = false;
+
+    if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                // Open menu
+                mobileIcon.textContent = 'close';
+                mobileIcon.style.transform = 'rotate(90deg)';
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+
+                // Anime.js stagger for links
+                anime({
+                    targets: '.mobile-link',
+                    translateY: [20, 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger(100, { start: 200 }),
+                    duration: 600,
+                    easing: 'easeOutExpo'
+                });
+            } else {
+                // Close menu
+                mobileIcon.textContent = 'menu';
+                mobileIcon.style.transform = 'rotate(0deg)';
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // Close when clicking any link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (menuOpen) {
+                    mobileBtn.click(); // Trigger the close logic above
+                }
+            });
+        });
+    }
+});
