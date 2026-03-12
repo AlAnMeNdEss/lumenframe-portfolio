@@ -1,25 +1,76 @@
-/* ===== LUMEN FRAME — GSAP Animations ===== */
+/* ===== LUMEN FRAME — GSAP + Anime.js Animations ===== */
+/* Skills: animejs-animation, 3d-web-experience */
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin);
 
-// ===== LOADING SCREEN =====
-const loaderTl = gsap.timeline();
-loaderTl
-    .to('#loader-fill', {
-        width: '100%',
-        duration: 1.5,
-        ease: 'power2.inOut'
-    })
-    .to('#loader', {
-        yPercent: -100,
-        duration: 0.8,
-        ease: 'power3.inOut',
-        delay: 0.2,
-        onComplete: () => {
-            document.getElementById('loader').style.display = 'none';
-            animateHero();
+// ===== LENIS ULTRA-SMOOTH SCROLL (Skill: animejs-animation) =====
+let lenis;
+if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        smoothWheel: true,
+    });
+
+    function raf(time) {
+        lenis.raf(time);
+        ScrollTrigger.update();
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+}
+
+// ===== UPGRADED LOADING SCREEN (Anime.js skill) =====
+(function initLoader() {
+    const counter = document.getElementById('loader-counter');
+    const fill = document.getElementById('loader-fill');
+    const loader = document.getElementById('loader');
+
+    if (!counter || !loader) {
+        // Fallback to original GSAP loader
+        const loaderTl = gsap.timeline();
+        loaderTl
+            .to('#loader-fill', { width: '100%', duration: 1.5, ease: 'power2.inOut' })
+            .to('#loader', {
+                yPercent: -100, duration: 0.8, ease: 'power3.inOut', delay: 0.2,
+                onComplete: () => { document.getElementById('loader').style.display = 'none'; animateHero(); }
+            });
+        return;
+    }
+
+    let count = { value: 0 };
+
+    // Anime.js counter animation
+    anime({
+        targets: count,
+        value: 100,
+        duration: 1800,
+        easing: 'easeInOutQuad',
+        update: function () {
+            counter.textContent = Math.round(count.value);
+        },
+        complete: function () {
+            counter.textContent = '100';
+            // Exit animation
+            anime({
+                targets: '#loader',
+                translateY: '-100%',
+                duration: 900,
+                easing: 'cubicBezier(0.76, 0, 0.24, 1)',
+                delay: 200,
+                complete: () => {
+                    loader.style.display = 'none';
+                    animateHero();
+                    runLightBeams();
+                }
+            });
         }
     });
+
+    // Sync fill bar
+    gsap.to(fill, { width: '100%', duration: 1.8, ease: 'power2.inOut' });
+})();
 
 // ===== VIDEO MODAL =====
 const modal = document.getElementById('video-modal');
@@ -127,26 +178,32 @@ function animateHero() {
 
     // Set buttons and indicator hidden initially
     gsap.set('#hero .flex a, #hero .flex button', { y: 30, opacity: 0 });
-    gsap.set('.animate-bounce', { opacity: 0, y: -20 });
+    gsap.set('#scroll-indicator', { opacity: 0, y: 20 });
 
     heroTl
-        .from('#navbar', {
-            y: -80,
-            opacity: 0,
-            duration: 0.8,
-        })
+        .from('#navbar', { y: -80, opacity: 0, duration: 0.8 })
         .to('#hero .flex a, #hero .flex button', {
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            duration: 0.8,
-            ease: 'power3.out'
+            y: 0, opacity: 1, stagger: 0.15, duration: 0.8, ease: 'power3.out'
         }, '-=0.4')
-        .to('.animate-bounce', {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-        }, '-=0.2');
+        .to('#scroll-indicator', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2');
+}
+
+// ===== HERO FLOATING STATS — Removed (cards removed from HTML) =====
+
+// ===== LIGHT BEAM SWEEP (Anime.js — Skill: animejs-animation) =====
+function runLightBeams() {
+    const beams = document.querySelectorAll('.light-beam');
+    beams.forEach((beam, i) => {
+        anime({
+            targets: beam,
+            left: ['-100%', '200%'],
+            duration: 2200,
+            delay: i * 400,
+            easing: 'easeInOutSine',
+            loop: true,
+            loopDelay: 4000 + i * 1200,
+        });
+    });
 }
 
 // ===== HERO PARALLAX ON SCROLL =====
@@ -271,14 +328,174 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             e.preventDefault();
-            gsap.to(window, {
-                scrollTo: { y: target, offsetY: 80 },
-                duration: 1,
-                ease: 'power3.inOut'
-            });
+            if (lenis) {
+                lenis.scrollTo(target, { offset: -80, duration: 1.2 });
+            } else {
+                gsap.to(window, { scrollTo: { y: target, offsetY: 80 }, duration: 1, ease: 'power3.inOut' });
+            }
         }
     });
 });
+
+// ===== CINEMA SEPARATORS — Intersection Observer (Skill: animejs-animation) =====
+(function initCinemaSeparators() {
+    const seps = document.querySelectorAll('.cinema-separator');
+    if (!seps.length) return;
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    seps.forEach(s => obs.observe(s));
+})();
+
+// ===== ANIMATED STAT COUNTERS — Anime.js (Skill: animejs-animation) =====
+(function initStatCounters() {
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+    if (!statNumbers.length) return;
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const target = parseInt(el.dataset.target);
+            const suffix = el.dataset.suffix || '';
+            const suffixSpan = el.querySelector('span');
+
+            // Anime.js counter — staggered spring reveal
+            const obj = { value: 0 };
+            anime({
+                targets: obj,
+                value: target,
+                round: 1,
+                duration: 1800,
+                easing: 'easeOutExpo',
+                update: () => {
+                    const mainText = el.childNodes[0];
+                    if (mainText && mainText.nodeType === Node.TEXT_NODE) {
+                        mainText.textContent = obj.value;
+                    }
+                },
+                begin: () => {
+                    anime({
+                        targets: el,
+                        opacity: [0, 1],
+                        translateY: [30, 0],
+                        duration: 600,
+                        easing: 'easeOutQuint',
+                    });
+                }
+            });
+
+            obs.unobserve(el);
+        });
+    }, { threshold: 0.6 });
+
+    statNumbers.forEach(el => {
+        el.style.opacity = '0';
+        obs.observe(el);
+    });
+
+    // Stagger in the whole stats row (now points to video section)
+    ScrollTrigger.create({
+        trigger: '#sobre-video',
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+            // Text slides in from left
+            anime({
+                targets: '#sobre-video-text > *',
+                translateX: [-50, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(100, { start: 100 }),
+                duration: 800,
+                easing: 'easeOutExpo',
+            });
+            // Video frame drops in with spring
+            anime({
+                targets: '#sobre-video-player',
+                translateY: [60, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                delay: 300,
+                easing: 'spring(1, 80, 10, 0)',
+            });
+            // Glow ring pulses in
+            anime({
+                targets: '.insta-glow',
+                opacity: [0, 0.6],
+                duration: 1200,
+                delay: 600,
+                easing: 'easeOutQuad',
+            });
+        }
+    });
+})();
+
+// ===== EXPERTISE LIST STAGGER — Anime.js (Skill: animejs-animation) =====
+(function initExpertiseAnimations() {
+    ScrollTrigger.create({
+        trigger: '#portais',
+        start: 'top 70%',
+        once: true,
+        onEnter: () => {
+            anime({
+                targets: '.expertise-li',
+                translateX: [-30, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(80, { start: 400 }),
+                duration: 600,
+                easing: 'spring(1, 80, 10, 0)',
+            });
+        }
+    });
+})();
+
+// ===== SVG PATH DRAW — Anime.js (Skill: animejs-animation) =====
+(function initSVGDraw() {
+    const paths = ['#svg-line-1', '#svg-line-2'];
+    paths.forEach(id => {
+        const el = document.querySelector(id);
+        if (!el) return;
+        const length = el.getTotalLength ? el.getTotalLength() : 1000;
+        anime.set(id, { strokeDasharray: length, strokeDashoffset: length });
+    });
+
+    ScrollTrigger.create({
+        trigger: '#sobre-detalhe',
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+            anime({
+                targets: '#svg-line-1',
+                strokeDashoffset: [anime.setDashoffset, 0],
+                duration: 2000,
+                easing: 'easeInOutSine',
+            });
+            anime({
+                targets: '#svg-line-2',
+                strokeDashoffset: [anime.setDashoffset, 0],
+                duration: 2400,
+                delay: 300,
+                easing: 'easeInOutSine',
+            });
+            anime({
+                targets: '#svg-circle-1, #svg-circle-2',
+                opacity: [0, 0.3],
+                scale: [0.5, 1],
+                transformOrigin: 'center',
+                delay: anime.stagger(200),
+                duration: 1000,
+                easing: 'easeOutElastic(1, 0.5)',
+            });
+        }
+    });
+})();
 
 // ===== VIDEO FALLBACK =====
 const video = document.querySelector('.hero-video');

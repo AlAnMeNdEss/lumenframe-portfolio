@@ -29,6 +29,10 @@
   <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
   <!-- Spline Viewer -->
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
+  <!-- Anime.js — Advanced Animation Engine (Skill: animejs-animation) -->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <!-- Lenis — Ultra-smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
   <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
@@ -211,8 +215,8 @@
 
     .loader-bar {
       width: 200px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.1);
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 3px;
       overflow: hidden;
     }
@@ -220,15 +224,62 @@
     .loader-fill {
       width: 0%;
       height: 100%;
-      background: #0b50da;
+      background: linear-gradient(90deg, #0b50da, #4a90e2, #0b50da);
+      background-size: 200%;
       border-radius: 3px;
+      animation: shimmerLoad 1.5s linear infinite;
+    }
+
+    @keyframes shimmerLoad {
+      0% {
+        background-position: 200% center;
+      }
+
+      100% {
+        background-position: -200% center;
+      }
+    }
+
+    .loader-logo {
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(11, 80, 218, 0.3);
+      border-top-color: #0b50da;
+      border-radius: 50%;
+      animation: loaderSpin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes loaderSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loader-logo-inner {
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(11, 80, 218, 0.2);
+      border-bottom-color: #0b50da;
+      border-radius: 50%;
+      animation: loaderSpin 0.6s linear infinite reverse;
     }
 
     .loader-text {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 12px;
-      letter-spacing: 4px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 11px;
+      letter-spacing: 6px;
       text-transform: uppercase;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .loader-counter {
+      font-size: 48px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -2px;
+      line-height: 1;
     }
 
     /* Horizontal line animation */
@@ -312,6 +363,79 @@
     /* Smooth scroll behavior */
     html {
       scroll-behavior: smooth;
+    }
+
+    /* ===== SCROLL INDICATOR LINE ===== */
+    @keyframes scrollLine {
+      0% {
+        opacity: 0;
+        transform: scaleY(0);
+        transform-origin: top;
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      70% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scaleY(1);
+        transform-origin: bottom;
+      }
+    }
+
+    /* ===== NAV LINK HOVER UNDERLINE ===== */
+    nav a {
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #0b50da;
+      transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* ===== FAQ SMOOTH EXPAND ===== */
+    details[open] summary~* {
+      animation: faqExpand 0.35s ease;
+    }
+
+    @keyframes faqExpand {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== EXPERTISE CARD ICON GLOW ===== */
+    .expertise-card:hover .material-symbols-outlined {
+      text-shadow: 0 0 20px rgba(11, 80, 218, 0.8);
+    }
+
+    /* ===== FOOTER BENTO HOVER ===== */
+    .bento-item {
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+        background 0.5s ease,
+        border-color 0.5s ease,
+        box-shadow 0.5s ease;
     }
 
     /* Section dividers with cinematic effect */
@@ -720,39 +844,55 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Custom Cursor Styles */
+    /* Custom Cursor Styles — Upgraded (Skill: animejs-animation) */
     .custom-cursor {
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(11, 80, 218, 0.5);
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid rgba(11, 80, 218, 0.7);
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: width 0.3s, height 0.3s, background 0.3s;
+      transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+        height 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+        background 0.3s,
+        border-color 0.3s;
+      mix-blend-mode: screen;
     }
 
     .cursor-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       background: #0b50da;
       border-radius: 50%;
       position: fixed;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
+      transition: transform 0.1s;
     }
 
     .cursor-hover {
-      width: 80px;
-      height: 80px;
-      background: rgba(11, 80, 218, 0.1);
-      border-color: #0b50da;
+      width: 72px;
+      height: 72px;
+      background: rgba(11, 80, 218, 0.08);
+      border-color: rgba(11, 80, 218, 0.9);
     }
 
     .cursor-dot-hover {
-      transform: translate(-50%, -50%) scale(2);
+      transform: translate(-50%, -50%) scale(2.5);
+      background: #4a90e2;
+    }
+
+    .cursor-text {
+      width: 80px;
+      height: 80px;
+      background: rgba(11, 80, 218, 0.95);
+      border-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     @media (max-width: 1024px) {
@@ -761,6 +901,480 @@
       .cursor-dot {
         display: none;
       }
+    }
+
+    /* ===== AMBIENT LIGHT ORBS ===== */
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(80px);
+      opacity: 0;
+      animation: orbPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes orbPulse {
+
+      0%,
+      100% {
+        opacity: 0.15;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.35;
+        transform: scale(1.2);
+      }
+    }
+
+    /* ===== GLITCH TEXT EFFECT ===== */
+    .glitch-text {
+      position: relative;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .glitch-text::before {
+      animation: glitch1 4s infinite linear;
+      color: #0b50da;
+      clip-path: polygon(0 35%, 100% 35%, 100% 50%, 0 50%);
+      transform: translateX(-2px);
+    }
+
+    .glitch-text::after {
+      animation: glitch2 4s infinite linear;
+      color: #4a90e2;
+      clip-path: polygon(0 65%, 100% 65%, 100% 80%, 0 80%);
+      transform: translateX(2px);
+    }
+
+    @keyframes glitch1 {
+
+      0%,
+      90%,
+      100% {
+        transform: translateX(-2px) skewX(0deg);
+        opacity: 0;
+      }
+
+      91% {
+        transform: translateX(-4px) skewX(-2deg);
+        opacity: 0.8;
+      }
+
+      93% {
+        transform: translateX(4px) skewX(2deg);
+        opacity: 0.8;
+      }
+
+      95% {
+        transform: translateX(-2px) skewX(0deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes glitch2 {
+
+      0%,
+      88%,
+      100% {
+        transform: translateX(2px) skewX(0deg);
+        opacity: 0;
+      }
+
+      89% {
+        transform: translateX(6px) skewX(1deg);
+        opacity: 0.6;
+      }
+
+      92% {
+        transform: translateX(-3px) skewX(-1deg);
+        opacity: 0.6;
+      }
+
+      94% {
+        transform: translateX(2px) skewX(0deg);
+        opacity: 0;
+      }
+    }
+
+    /* ===== STATS ROW ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat-item {
+      background: rgba(16, 22, 34, 0.95);
+      padding: 40px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s ease;
+    }
+
+    .stat-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(11, 80, 218, 0.15) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .stat-item:hover::before {
+      opacity: 1;
+    }
+
+    .stat-item:hover {
+      background: rgba(11, 22, 44, 0.98);
+    }
+
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+      letter-spacing: -3px;
+      display: block;
+    }
+
+    .stat-number span {
+      color: #0b50da;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 8px;
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* ===== INSTAGRAM VIDEO PLAYER ===== */
+    .insta-video-frame {
+      position: relative;
+      width: 300px;
+      border-radius: 24px;
+      background: #0c111d;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+
+    .insta-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 26px;
+      background: conic-gradient(from 0deg,
+          transparent 0deg,
+          rgba(11, 80, 218, 0.7) 60deg,
+          rgba(74, 144, 226, 0.9) 120deg,
+          rgba(11, 80, 218, 0.7) 180deg,
+          transparent 240deg,
+          transparent 360deg);
+      z-index: -1;
+      animation: glowSpin 4s linear infinite;
+      filter: blur(6px);
+      opacity: 0.6;
+    }
+
+    @keyframes glowSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .insta-top-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .insta-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .insta-label {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .insta-video-wrapper {
+      position: relative;
+      width: 300px;
+      /* 9:16 aspect ratio */
+      height: 533px;
+      background: #080c14;
+      overflow: hidden;
+    }
+
+    .insta-video-el {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Esconde vídeo com src vazio e mostra placeholder */
+    .insta-video-el:not([src]),
+    .insta-video-el[src=""] {
+      display: none;
+    }
+
+    .insta-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 40%, rgba(11, 80, 218, 0.12) 0%, transparent 70%);
+    }
+
+    /* Esconde placeholder quando vídeo tem src */
+    .insta-video-el[src]:not([src=""])~.insta-placeholder,
+    .insta-video-el:not([src=""])+.insta-placeholder {
+      display: none;
+    }
+
+    .insta-placeholder-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .insta-placeholder-text {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+    }
+
+    .insta-bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    @media (max-width: 1024px) {
+      .insta-video-frame {
+        width: 260px;
+      }
+
+      .insta-video-wrapper {
+        width: 260px;
+        height: 462px;
+        /* 9:16 */
+      }
+    }
+
+    @media (max-width: 640px) {
+      .insta-video-frame {
+        width: 240px;
+      }
+
+      .insta-video-wrapper {
+        width: 240px;
+        height: 427px;
+        /* 9:16 */
+      }
+    }
+
+    /* ===== SHIMMER BORDER CARD ===== */
+    .shimmer-card {
+      position: relative;
+    }
+
+    .shimmer-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg,
+          rgba(11, 80, 218, 0) 0%,
+          rgba(11, 80, 218, 0.6) 30%,
+          rgba(74, 144, 226, 0.8) 50%,
+          rgba(11, 80, 218, 0.6) 70%,
+          rgba(11, 80, 218, 0) 100%);
+      background-size: 300% 300%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      animation: shimmerBorder 3s linear infinite;
+      z-index: -1;
+    }
+
+    .shimmer-card:hover::before {
+      opacity: 1;
+    }
+
+    @keyframes shimmerBorder {
+      0% {
+        background-position: 0% 0%;
+      }
+
+      100% {
+        background-position: 300% 300%;
+      }
+    }
+
+    /* ===== FLOATING LABEL ===== */
+    .floating-badge {
+      position: absolute;
+      background: rgba(11, 80, 218, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(74, 144, 226, 0.4);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: floatBadge 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatBadge {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(-1deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(1deg);
+      }
+    }
+
+    /* ===== CINEMATIC LINE SEPARATOR ===== */
+    .cinema-separator {
+      position: relative;
+      height: 2px;
+      background: transparent;
+      overflow: visible;
+      margin: 0;
+    }
+
+    .cinema-separator::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #0b50da, #4a90e2, #0b50da, transparent);
+      border-radius: 2px;
+      box-shadow: 0 0 20px rgba(11, 80, 218, 0.6);
+    }
+
+    .cinema-separator.animated::before {
+      width: 80%;
+      transition: width 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* ===== NOISE TEXTURE overlay ===== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 99999;
+      opacity: 0.5;
+      mix-blend-mode: overlay;
+    }
+
+    /* ===== HERO STATS FLOATING ===== */
+    .hero-stat-float {
+      position: absolute;
+      background: rgba(16, 22, 34, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 24px;
+      pointer-events: none;
+      z-index: 25;
+    }
+
+    .hero-stat-float .num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+    }
+
+    .hero-stat-float .num em {
+      color: #0b50da;
+      font-style: normal;
+    }
+
+    .hero-stat-float .lbl {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 4px;
+    }
+
+    /* ===== HORIZONTAL LIGHT BEAM ===== */
+    .light-beam {
+      position: absolute;
+      left: -100%;
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(11, 80, 218, 0.8), rgba(74, 144, 226, 1), rgba(11, 80, 218, 0.8), transparent);
+      box-shadow: 0 0 15px rgba(11, 80, 218, 0.5);
+      pointer-events: none;
     }
 
 
@@ -804,8 +1418,14 @@
 
 <body class="bg-background-dark text-slate-100 antialiased overflow-x-hidden">
 
-  <!-- Loading Screen -->
+  <!-- Loading Screen — Upgraded -->
   <div class="loader" id="loader">
+    <div class="relative">
+      <div class="loader-logo">
+        <div class="loader-logo-inner"></div>
+      </div>
+    </div>
+    <div class="loader-counter" id="loader-counter">0</div>
     <div class="loader-text">Lumen Frame</div>
     <div class="loader-bar">
       <div class="loader-fill" id="loader-fill"></div>
@@ -853,6 +1473,14 @@
     <!-- Premium 3D Particles Container -->
     <canvas id="hero-canvas" class="absolute inset-0 z-10 pointer-events-none"></canvas>
 
+    <!-- Ambient Orbs -->
+    <div class="ambient-orb"
+      style="width:600px;height:600px;background:radial-gradient(circle,rgba(11,80,218,0.5),transparent 70%);top:-100px;left:-200px;animation-delay:0s;">
+    </div>
+    <div class="ambient-orb"
+      style="width:400px;height:400px;background:radial-gradient(circle,rgba(74,144,226,0.4),transparent 70%);bottom:-50px;right:-100px;animation-delay:3s;">
+    </div>
+
     <!-- Video element (used as texture for 3D, visually hidden) -->
     <video id="hero-video-texture" class="sr-only absolute" autoplay muted loop playsinline crossorigin="anonymous">
       <source src="header-video.mp4" type="video/mp4">
@@ -861,8 +1489,12 @@
     <!-- Gradient Overlay -->
     <div class="absolute inset-0 hero-overlay z-20 pointer-events-none"></div>
 
-    <!-- Container do Hero (Botão mais baixo) -->
-    <div class="relative z-30 max-w-5xl mx-auto px-6 hero-centered reveal justify-end pb-32">
+    <!-- Light Beam -->
+    <div class="light-beam" id="hero-light-beam" style="top:40%;z-index:25;"></div>
+
+    <!-- Container do Hero (Botão centralizado mais abaixo) -->
+    <div class="relative z-30 max-w-5xl mx-auto px-6 hero-centered reveal justify-end"
+      style="padding-bottom: 80px; padding-top: 160px;">
       <div class="flex flex-wrap justify-center">
         <a href="https://wa.me/558892542320" target="_blank"
           class="bg-primary text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-2xl shadow-primary/40 transform hover:scale-105 active:scale-95">
@@ -878,19 +1510,43 @@
       </video>
     </div>
     <!-- Scroll Indicator -->
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-      <span class="material-symbols-outlined text-white/50 text-3xl">expand_more</span>
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20" id="scroll-indicator">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <span
+          style="font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:'Syne',sans-serif;">Scroll</span>
+        <div
+          style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(11,80,218,0.8),transparent);animation:scrollLine 2s ease-in-out infinite;">
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- Cinema Separator -->
+  <div class="cinema-separator" id="sep1"></div>
+
   <!-- Section Sobre: Realidade Cinematográfica (Sand Background) -->
   <section id="sobre-detalhe" class="bg-sand py-32 px-6 relative overflow-hidden z-20">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+    <!-- SVG Decorative Lines (Skill: 3d-web-experience) -->
+    <svg class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20" style="z-index:0"
+      viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path id="svg-line-1" d="M -100 200 Q 400 100 900 350 T 1640 300" stroke="#0b50da" stroke-width="1" fill="none"
+        stroke-dasharray="8 6" opacity="0.5" />
+      <path id="svg-line-2" d="M 200 800 Q 700 600 1200 700 T 1700 500" stroke="#4a90e2" stroke-width="0.5" fill="none"
+        stroke-dasharray="4 8" opacity="0.4" />
+      <circle id="svg-circle-1" cx="120" cy="120" r="60" stroke="#0b50da" stroke-width="0.5" fill="none"
+        opacity="0.3" />
+      <circle id="svg-circle-2" cx="1320" cy="750" r="100" stroke="#4a90e2" stroke-width="0.5" fill="none"
+        opacity="0.2" />
+    </svg>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
       <!-- Info -->
       <div class="lg:col-span-6 reveal pr-8">
         <span class="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Visão & Legado</span>
         <h2 class="text-3xl md:text-5xl font-black text-onyx mb-8 tracking-tighter leading-tight">
-          Transformamos visão em realidade cinematográfica.
+          Transformamos visão em <span class="relative inline-block" style="color:#0b50da;">realidade<span
+              style="position:absolute;bottom:-4px;left:0;width:100%;height:2px;background:linear-gradient(90deg,#0b50da,transparent);"></span></span>
+          cinematográfica.
         </h2>
         <p class="text-lg text-slate-600 mb-10 leading-relaxed max-w-lg">
           A Lumen Frame nasceu da paixão por contar histórias de modo único. Somos uma produtora focada em elevar o
@@ -904,22 +1560,135 @@
       </div>
       <!-- Image Grid -->
       <div class="lg:col-span-6 grid grid-cols-2 gap-4 reveal reveal-delay-2">
-        <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
-          <img src="img/about1.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+        <div class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl img-parallax-wrap">
+          <img src="img/about1.jpg"
+            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Lumen Frame Prod">
         </div>
-        <div class="aspect-[4/5] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8">
+        <div
+          class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8 img-parallax-wrap">
           <img src="img/about2.jpeg"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-700" alt="Produção 4K">
+            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+            alt="Produção 4K">
         </div>
-        <div class="aspect-[4/3] rounded-3xl bg-slate-200 overflow-hidden shadow-xl">
-          <img src="img/about3.png" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+        <div class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl img-parallax-wrap">
+          <img src="img/about3.png"
+            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Edição Profissional">
         </div>
-        <div class="aspect-square rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform -translate-y-8">
-          <img src="img/about4.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+        <div
+          class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8 img-parallax-wrap">
+          <img src="img/about4.jpg"
+            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Equipe Lumen">
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cinema Separator -->
+  <div class="cinema-separator" id="sep2"></div>
+
+  <!-- Seção de Apresentação em Vídeo — Formato Instagram -->
+  <section id="sobre-video" class="py-24 px-6 bg-background-dark relative overflow-hidden">
+    <!-- Ambient background glow -->
+    <div class="ambient-orb"
+      style="width:700px;height:700px;background:radial-gradient(circle,rgba(11,80,218,0.25),transparent 70%);top:-200px;right:-200px;animation-delay:0s;">
+    </div>
+    <div class="ambient-orb"
+      style="width:400px;height:400px;background:radial-gradient(circle,rgba(74,144,226,0.2),transparent 70%);bottom:0;left:-100px;animation-delay:4s;">
+    </div>
+
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+
+        <!-- Texto lado esquerdo -->
+        <div class="lg:flex-1 text-center lg:text-left" id="sobre-video-text">
+          <span class="text-primary font-bold tracking-widest text-xs uppercase mb-6 block">Quem somos</span>
+          <h2 class="text-3xl md:text-5xl font-black text-white mb-6 tracking-tighter leading-tight">
+            Conheça a<br><span class="gradient-text">Lumen Frame</span>
+          </h2>
+          <p class="text-slate-400 text-lg leading-relaxed mb-10 max-w-md mx-auto lg:mx-0">
+            Uma produtora audiovisual que transforma cada projeto em uma experiência cinematográfica única. Venha
+            conhecer nossa história, nossa equipe e nossa paixão por imagens que emocionam.
+          </p>
+          <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+            <a href="https://wa.me/558892542320" target="_blank"
+              class="bg-primary text-white px-8 py-3.5 rounded-full font-bold text-sm hover:bg-blue-700 transition-all shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transform">
+              Falar com a Equipe
+            </a>
+            <a href="#briefing"
+              class="border border-white/15 text-white px-8 py-3.5 rounded-full font-bold text-sm hover:bg-white/5 transition-all">
+              Ver Serviços
+            </a>
+          </div>
+        </div>
+
+        <!-- Player de vídeo — formato vertical Instagram (9:16) -->
+        <div class="flex-shrink-0 flex flex-col items-center gap-6" id="sobre-video-player">
+          <!-- Frame do vídeo com efeito premium -->
+          <div class="insta-video-frame" id="insta-frame">
+            <!-- Glow externo animado -->
+            <div class="insta-glow"></div>
+
+            <!-- Borda decorativa superior -->
+            <div class="insta-top-bar">
+              <div class="insta-dot" style="background:#ff5f57;"></div>
+              <div class="insta-dot" style="background:#febc2e;"></div>
+              <div class="insta-dot" style="background:#28c840;"></div>
+              <span class="insta-label">Lumen Frame</span>
+            </div>
+
+            <!-- Área do vídeo -->
+            <div class="insta-video-wrapper">
+              <video id="sobre-video-el" class="insta-video-el" controls controlsList="nodownload nofullscreen"
+                playsinline preload="metadata" poster="">
+                <!-- Coloque aqui o src do seu vídeo, ex: src="apresentacao.mp4" -->
+                <source src="" type="video/mp4">
+              </video>
+
+              <!-- Placeholder quando não há vídeo -->
+              <div class="insta-placeholder" id="insta-placeholder">
+                <div class="insta-placeholder-icon">
+                  <span class="material-symbols-outlined"
+                    style="font-size:48px;color:rgba(255,255,255,0.3);">smart_display</span>
+                </div>
+                <p class="insta-placeholder-text">Adicione o vídeo de apresentação</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.25);margin-top:4px;letter-spacing:2px;">
+                  SRC="seu-video.mp4"</p>
+              </div>
+            </div>
+
+            <!-- Barra inferior estilo Instagram -->
+            <div class="insta-bottom-bar">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div
+                  style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#0b50da,#4a90e2);display:flex;align-items:center;justify-content:center;">
+                  <span class="material-symbols-outlined" style="font-size:14px;color:white;">filter_tilt_shift</span>
+                </div>
+                <span style="font-size:0.75rem;font-weight:700;color:white;">lumenframe.ce</span>
+              </div>
+              <div style="display:flex;gap:14px;align-items:center;">
+                <span class="material-symbols-outlined"
+                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">favorite_border</span>
+                <span class="material-symbols-outlined"
+                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">chat_bubble_outline</span>
+                <span class="material-symbols-outlined"
+                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">send</span>
+              </div>
+            </div>
+
+            <!-- Scan lines cinematográficas -->
+            <div class="video-scan-lines" style="border-radius:24px;"></div>
+          </div>
+
+          <!-- Instrução sutil -->
+          <p
+            style="font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);text-align:center;">
+            Vídeo de Apresentação
+          </p>
+        </div>
+
       </div>
     </div>
   </section>
@@ -935,65 +1704,88 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Expertise 1 -->
-        <div class="expertise-card reveal">
-          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8">
+        <div class="expertise-card shimmer-card reveal" style="border-radius:24px;">
+          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8"
+            style="position:relative;">
             <span class="material-symbols-outlined text-primary text-3xl">celebration</span>
+            <div
+              style="position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle,rgba(11,80,218,0.2),transparent 70%);animation:orbPulse 3s ease-in-out infinite;">
+            </div>
           </div>
           <h3 class="text-2xl font-bold text-white mb-6">Cobertura de Eventos</h3>
           <ul class="space-y-4 text-slate-400 mb-10">
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Casamentos
-            </li>
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Aniversários
-              de 15 Anos</li>
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Formaturas
-            </li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Casamentos</li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Aniversários de 15 Anos</li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Formaturas</li>
           </ul>
           <button onclick="document.getElementById('briefing').scrollIntoView({behavior: 'smooth'})"
-            class="text-white font-bold flex items-center gap-2 hover:gap-4 transition-all focus:outline-none">
-            Descobrir mais <span class="material-symbols-outlined">arrow_forward</span>
+            class="text-white font-bold flex items-center gap-2 hover:gap-4 transition-all focus:outline-none group">
+            Descobrir mais
+            <span
+              class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-2">arrow_forward</span>
           </button>
         </div>
 
         <!-- Expertise 2 -->
-        <div class="expertise-card reveal reveal-delay-1">
-          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8">
+        <div class="expertise-card shimmer-card reveal reveal-delay-1" style="border-radius:24px;">
+          <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8"
+            style="position:relative;">
             <span class="material-symbols-outlined text-primary text-3xl">business</span>
+            <div
+              style="position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle,rgba(11,80,218,0.2),transparent 70%);animation:orbPulse 3s ease-in-out infinite;animation-delay:1.5s;">
+            </div>
           </div>
           <h3 class="text-2xl font-bold text-white mb-6">Vídeos Corporativos</h3>
           <ul class="space-y-4 text-slate-400 mb-10">
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Institucionais
-            </li>
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Publicidade e
-              Reels</li>
-            <li class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Treinamentos
-            </li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Institucionais</li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Publicidade e Reels</li>
+            <li class="flex items-center gap-3 expertise-li"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Treinamentos</li>
           </ul>
           <button onclick="document.getElementById('briefing').scrollIntoView({behavior: 'smooth'})"
-            class="text-white font-bold flex items-center gap-2 hover:gap-4 transition-all focus:outline-none">
-            Descobrir mais <span class="material-symbols-outlined">arrow_forward</span>
+            class="text-white font-bold flex items-center gap-2 hover:gap-4 transition-all focus:outline-none group">
+            Descobrir mais
+            <span
+              class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-2">arrow_forward</span>
           </button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Seção Redundante Removida (Briefing antigo) -->
+  <!-- Cinema Separator -->
+  <div class="cinema-separator" id="sep3"></div>
 
-
-  <!-- CTA Section: Blue Block -->
-  <section class="py-24 px-6">
-    <div class="max-w-7xl mx-auto cta-solid text-center reveal">
-      <h2 class="text-4xl md:text-6xl font-black text-white mb-8">Pronto para eternizar <br>seu próximo evento?</h2>
-      <p class="text-blue-100 text-xl mb-12 max-w-2xl mx-auto">Vamos conversar e criar algo extraordinário juntos.</p>
-      <div class="flex flex-wrap justify-center gap-6">
-        <button onclick="document.getElementById('briefing').scrollIntoView({behavior: 'smooth'})"
-          class="bg-white text-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl">
-          Preencher Briefing
-        </button>
-        <a href="https://wa.me/558892542320" target="_blank"
-          class="border border-white/30 bg-white/10 text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-white/20 transition-all">
-          Chamar no WhatsApp
-        </a>
+  <!-- CTA Section: Blue Block — with ambient orbs -->
+  <section class="py-24 px-6 relative overflow-hidden">
+    <div class="ambient-orb"
+      style="width:500px;height:500px;background:radial-gradient(circle,rgba(11,80,218,0.4),transparent 70%);top:-100px;right:-100px;animation-delay:1s;">
+    </div>
+    <div class="ambient-orb"
+      style="width:300px;height:300px;background:radial-gradient(circle,rgba(74,144,226,0.3),transparent 70%);bottom:0;left:0;animation-delay:4s;">
+    </div>
+    <div class="max-w-7xl mx-auto cta-solid text-center reveal" style="position:relative;overflow:hidden;">
+      <!-- Light beams inside CTA -->
+      <div class="light-beam" style="top:30%;z-index:1;opacity:0.5;"></div>
+      <div class="light-beam" style="top:70%;z-index:1;opacity:0.3;animation-delay:1s;"></div>
+      <div style="position:relative;z-index:2;">
+        <h2 class="text-4xl md:text-6xl font-black text-white mb-8">Pronto para eternizar <br>seu próximo evento?</h2>
+        <p class="text-blue-100 text-xl mb-12 max-w-2xl mx-auto">Vamos conversar e criar algo extraordinário juntos.</p>
+        <div class="flex flex-wrap justify-center gap-6">
+          <button onclick="document.getElementById('briefing').scrollIntoView({behavior: 'smooth'})"
+            class="bg-white text-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl">
+            Preencher Briefing
+          </button>
+          <a href="https://wa.me/558892542320" target="_blank"
+            class="border border-white/30 bg-white/10 text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-white/20 transition-all">
+            Chamar no WhatsApp
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -1149,6 +1941,10 @@
 
     <div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-900/10 blur-[120px] rounded-full"></div>
+    <!-- Animated grid background -->
+    <div
+      style="position:absolute;inset:0;background-image:linear-gradient(rgba(11,80,218,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(11,80,218,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;">
+    </div>
   </section>
 
   <footer id="contato" class="py-24 bg-background-dark border-t border-white/5">
