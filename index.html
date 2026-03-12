@@ -31,6 +31,8 @@
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
   <!-- Anime.js — Advanced Animation Engine (Skill: animejs-animation) -->
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <!-- Ukiyo.js — Simple and beautiful parallax library -->
+  <script src="https://cdn.jsdelivr.net/npm/ukiyojs@4.1.2/dist/ukiyo.min.js"></script>
   <!-- Lenis — Ultra-smooth scroll -->
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
   <script id="tailwind-config">
@@ -1136,9 +1138,6 @@
       font-family: 'Syne', sans-serif;
     }
 
-    .insta-video-wrapper {
-      /* properties migrated to tailwind css classes */
-    }
 
     .insta-video-el {
       width: 100%;
@@ -1487,16 +1486,9 @@
     <!-- Light Beam -->
     <div class="light-beam" id="hero-light-beam" style="top:40%;z-index:25;"></div>
 
-    <!-- Container do Hero (Botão centralizado mais abaixo) -->
-    <div class="relative z-30 max-w-5xl mx-auto px-6 hero-centered reveal justify-end"
-      style="padding-bottom: 80px; padding-top: 160px;">
-      <div class="flex flex-wrap justify-center">
-        <a href="https://wa.me/558892542320" target="_blank"
-          class="bg-primary text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-2xl shadow-primary/40 transform hover:scale-105 active:scale-95">
-          Peça seu Orçamento
-        </a>
-      </div>
-    </div>
+    <!-- Container do Hero (Spacer) -->
+    <div class="relative z-30 max-w-5xl mx-auto px-6 hero-centered pointer-events-none"
+      style="padding-bottom: 80px; padding-top: 160px;"></div>
 
     <!-- Video Stage Background (Fixed 3D Perspective) -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full opacity-90">
@@ -1504,9 +1496,15 @@
         <source src="header-video.mp4" type="video/mp4">
       </video>
     </div>
-    <!-- Scroll Indicator -->
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20" id="scroll-indicator">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+    <!-- Botão Peça seu Orçamento & Scroll Indicator Centralizados Abaixo -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-6 reveal">
+      <a href="https://wa.me/558892542320" target="_blank"
+        class="bg-primary text-white px-10 py-4 rounded-full font-bold text-sm sm:text-lg hover:bg-blue-700 transition-all shadow-2xl shadow-primary/40 transform hover:scale-105 active:scale-95 whitespace-nowrap mb-2">
+        Peça seu Orçamento
+      </a>
+
+      <div id="scroll-indicator" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
         <span
           style="font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:'Syne',sans-serif;">Scroll</span>
         <div
@@ -1557,24 +1555,24 @@
       <div class="lg:col-span-6 grid grid-cols-2 gap-4 reveal reveal-delay-2">
         <div class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl img-parallax-wrap">
           <img src="img/about1.jpg"
-            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+            class="ukiyo w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Lumen Frame Prod">
         </div>
         <div
           class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8 img-parallax-wrap">
           <img src="img/about2.jpeg"
-            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+            class="ukiyo w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Produção 4K">
         </div>
         <div class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl img-parallax-wrap">
           <img src="img/about3.png"
-            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+            class="ukiyo w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Edição Profissional">
         </div>
         <div
           class="aspect-[3/4] rounded-3xl bg-slate-200 overflow-hidden shadow-xl transform translate-y-8 img-parallax-wrap">
           <img src="img/about4.jpg"
-            class="w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
+            class="ukiyo w-full h-full object-cover object-top hover:scale-110 transition-transform duration-700"
             alt="Equipe Lumen">
         </div>
       </div>

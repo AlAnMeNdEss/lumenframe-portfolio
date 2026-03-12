@@ -3,6 +3,21 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin);
 
+// ===== UKIYO PARALLAX INITIALIZATION (Skill: ukiyo-js) =====
+document.addEventListener("DOMContentLoaded", () => {
+    // Check if Ukiyo is loaded and elements exist
+    if (typeof Ukiyo !== 'undefined') {
+        const ukiyos = document.querySelectorAll('.ukiyo');
+        if (ukiyos.length > 0) {
+            new Ukiyo('.ukiyo', {
+                scale: 1.15, // Scale image out to give parallax room
+                speed: 1.5,
+                willChange: true
+            });
+        }
+    }
+});
+
 // ===== LENIS ULTRA-SMOOTH SCROLL (Skill: animejs-animation) =====
 let lenis;
 if (typeof Lenis !== 'undefined') {
