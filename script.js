@@ -1578,3 +1578,25 @@ window.addEventListener('load', () => {
 
 
 })();
+
+// ===== INSTAGRAM REELS LIKE TOGGLE =====
+window.toggleReelsLike = function (el) {
+    const isLiked = el.classList.contains('liked');
+    const icon = el.querySelector('.material-symbols-outlined');
+
+    if (isLiked) {
+        el.classList.remove('liked');
+        icon.style.fontVariationSettings = "'FILL' 0"; // outline
+        icon.style.color = "white";
+        // Animação CSS inline simpes
+        icon.style.transform = "scale(0.8)";
+        setTimeout(() => icon.style.transform = "scale(1)", 150);
+    } else {
+        el.classList.add('liked');
+        icon.style.fontVariationSettings = "'FILL' 1"; // filled
+        icon.style.color = "#ff3040"; // Vermelho típico do Instagram
+        // Animação de pulso
+        icon.style.transform = "scale(1.2)";
+        setTimeout(() => icon.style.transform = "scale(1)", 150);
+    }
+}

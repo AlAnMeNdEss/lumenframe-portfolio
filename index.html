@@ -1631,23 +1631,15 @@
             <!-- Glow externo animado -->
             <div class="insta-glow"></div>
 
-            <!-- Borda decorativa superior -->
-            <div class="insta-top-bar">
-              <div class="insta-dot" style="background:#ff5f57;"></div>
-              <div class="insta-dot" style="background:#febc2e;"></div>
-              <div class="insta-dot" style="background:#28c840;"></div>
-              <span class="insta-label">Lumen Frame</span>
-            </div>
-
             <!-- Área do vídeo -->
-            <div class="insta-video-wrapper">
-              <video id="sobre-video-el" class="insta-video-el" controls controlsList="nodownload nofullscreen"
-                playsinline preload="metadata" poster="">
-                <!-- Coloque aqui o src do seu vídeo, ex: src="apresentacao.mp4" -->
-                <source src="" type="video/mp4">
+            <div class="insta-video-wrapper" style="border-radius:24px;overflow:hidden;">
+              <video id="sobre-video-el" class="insta-video-el" controlslist="nodownload nofullscreen noplaybackrate"
+                playsinline preload="metadata" poster="" loop autoplay muted>
+                <!-- Vídeo atualizado para o enviado pelo usuário -->
+                <source src="video da lumenframe.mp4" type="video/mp4">
               </video>
 
-              <!-- Placeholder quando não há vídeo -->
+              <!-- Placeholder (oculto quando tem src) -->
               <div class="insta-placeholder" id="insta-placeholder">
                 <div class="insta-placeholder-icon">
                   <span class="material-symbols-outlined"
@@ -1657,24 +1649,77 @@
                 <p style="font-size:0.7rem;color:rgba(255,255,255,0.25);margin-top:4px;letter-spacing:2px;">
                   SRC="seu-video.mp4"</p>
               </div>
-            </div>
 
-            <!-- Barra inferior estilo Instagram -->
-            <div class="insta-bottom-bar">
-              <div style="display:flex;align-items:center;gap:8px;">
+              <!-- REELS UI OVERLAY -->
+              <div class="reels-ui-overlay pointer-events-none absolute inset-0 flex flex-col justify-end p-4">
+                <!-- Sombra para dar leitura no texto -->
                 <div
-                  style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#0b50da,#4a90e2);display:flex;align-items:center;justify-content:center;">
-                  <span class="material-symbols-outlined" style="font-size:14px;color:white;">filter_tilt_shift</span>
+                  class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none z-0">
                 </div>
-                <span style="font-size:0.75rem;font-weight:700;color:white;">lumenframe.ce</span>
-              </div>
-              <div style="display:flex;gap:14px;align-items:center;">
-                <span class="material-symbols-outlined"
-                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">favorite_border</span>
-                <span class="material-symbols-outlined"
-                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">chat_bubble_outline</span>
-                <span class="material-symbols-outlined"
-                  style="font-size:20px;color:rgba(255,255,255,0.6);cursor:pointer;">send</span>
+
+                <div class="relative z-10 flex justify-between items-end">
+                  <!-- Lado Esquerdo: Info -->
+                  <div class="flex flex-col gap-3 pb-2 pointer-events-auto">
+                    <!-- Perfil -->
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
+                        <div
+                          class="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                          <span class="material-symbols-outlined text-[14px] text-white">filter_tilt_shift</span>
+                        </div>
+                      </div>
+                      <span class="text-white font-semibold text-sm drop-shadow-md">lumenframe.ce</span>
+                      <button
+                        class="border border-white/40 text-white text-[10px] font-bold px-2 py-1 rounded ml-1 bg-transparent hover:bg-white/10 backdrop-blur-sm transition-colors">Seguir</button>
+                    </div>
+                    <!-- Legenda -->
+                    <p class="text-white text-sm max-w-[200px] leading-snug drop-shadow-md">
+                      Por trás de cada produção, há uma história pronta para ser eternizada. 🎬✨<br>
+                      <span class="font-bold">#LumenFrame #Audiovisual</span>
+                    </p>
+                    <!-- Audio -->
+                    <div class="flex items-center gap-2 text-white/90 text-xs">
+                      <span class="material-symbols-outlined text-[14px]">music_note</span>
+                      <span>Audio original</span>
+                    </div>
+                  </div>
+
+                  <!-- Lado Direito: Actions -->
+                  <div class="flex flex-col items-center gap-5 pb-2 pointer-events-auto">
+                    <!-- Like -->
+                    <div class="flex flex-col items-center gap-1 cursor-pointer group" onclick="toggleReelsLike(this)">
+                      <span
+                        class="material-symbols-outlined text-white text-[28px] drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        style="font-variation-settings: 'FILL' 0;">favorite</span>
+                      <span class="text-white text-[11px] font-medium drop-shadow-md">1,2K</span>
+                    </div>
+                    <!-- Comentários -->
+                    <div class="flex flex-col items-center gap-1 cursor-pointer group">
+                      <span
+                        class="material-symbols-outlined text-white text-[28px] drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        style="font-variation-settings: 'FILL' 0;">chat_bubble</span>
+                      <span class="text-white text-[11px] font-medium drop-shadow-md">48</span>
+                    </div>
+                    <!-- Compartilhar -->
+                    <div class="flex flex-col items-center cursor-pointer group">
+                      <span
+                        class="material-symbols-outlined text-white text-[28px] drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        style="font-variation-settings: 'FILL' 0;">send</span>
+                    </div>
+                    <!-- Mais Opções -->
+                    <div class="flex flex-col items-center cursor-pointer group">
+                      <span
+                        class="material-symbols-outlined text-white text-[24px] drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                        style="font-variation-settings: 'FILL' 0;">more_horiz</span>
+                    </div>
+                    <!-- Audio Track Icon (Album) -->
+                    <div
+                      class="w-7 h-7 rounded-sm border-2 border-white/80 overflow-hidden flex items-center justify-center bg-zinc-800 mt-2 rotate-12">
+                      <span class="material-symbols-outlined text-[16px] text-white">music_note</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
