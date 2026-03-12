@@ -1077,7 +1077,6 @@
     /* ===== INSTAGRAM VIDEO PLAYER ===== */
     .insta-video-frame {
       position: relative;
-      width: 300px;
       border-radius: 24px;
       background: #0c111d;
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1086,6 +1085,7 @@
         0 40px 80px -20px rgba(0, 0, 0, 0.7),
         0 0 0 1px rgba(255, 255, 255, 0.05);
       flex-shrink: 0;
+      width: fit-content;
     }
 
     .insta-glow {
@@ -1137,12 +1137,7 @@
     }
 
     .insta-video-wrapper {
-      position: relative;
-      width: 300px;
-      /* 9:16 aspect ratio */
-      height: 533px;
-      background: #080c14;
-      overflow: hidden;
+      /* properties migrated to tailwind css classes */
     }
 
     .insta-video-el {
